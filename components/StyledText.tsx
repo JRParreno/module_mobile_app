@@ -1,5 +1,37 @@
-import { Text, TextProps } from './Themed';
+import { Text, TextProps } from "./Themed";
 
 export function MonoText(props: TextProps) {
-  return <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} />;
+  return (
+    <Text {...props} style={[props.style, { fontFamily: "space-mono" }]} />
+  );
+}
+
+export function PoppinText(props: TextProps) {
+  return (
+    <Text
+      {...props}
+      style={[
+        { fontFamily: "poppins-regular", fontSize: 14, color: "#262626" },
+        props.style,
+      ]}
+    />
+  );
+}
+
+export function PoppinTextBold(props: TextProps) {
+  return (
+    <Text
+      {...props}
+      style={[
+        {
+          fontFamily: "poppins-semibold",
+          fontSize: 25,
+          color: "#262626",
+          textAlign: "center",
+          marginBottom: 20,
+        },
+        props.style,
+      ]}
+    />
+  );
 }
