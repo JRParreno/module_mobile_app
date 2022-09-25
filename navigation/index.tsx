@@ -35,6 +35,7 @@ import { HomeScreen } from "../screens/Home";
 import Modal from "react-native-modal";
 import { PoppinText } from "../components/StyledText";
 import { Switch } from "react-native-elements";
+import AmunNavigator from "./AmunNavigator";
 
 export default function Navigation({
   colorScheme,
@@ -94,7 +95,7 @@ function RootNavigator() {
           headerRight: () => (
             <Pressable
               onPress={async () => {
-                await AsyncStorage.multiRemove(["skipLanding"]);
+                // await AsyncStorage.multiRemove(["skipLanding"]);
                 toggleModal();
               }}
             >
@@ -117,6 +118,7 @@ function RootNavigator() {
           component={LandingScreen}
           options={{ title: "", headerShown: false }}
         />
+        <Stack.Screen name="Amun" component={AmunNavigator} />
       </Stack.Navigator>
       <Modal
         testID={"modal"}

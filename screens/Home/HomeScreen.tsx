@@ -2,21 +2,23 @@ import * as React from "react";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import Lottie from "lottie-react-native";
-import { PoppinText, PoppinTextBold } from "../../components/StyledText";
+import { PoppinTextBold } from "../../components/StyledText";
 import { CategoryCard } from "../../components/Category";
 import { DefaultColor } from "../../constants/Colors";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState<boolean>(false);
-
+  const navigation = useNavigation();
   return (
     <ViewWithLoading loading={loading}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           <PoppinTextBold>CATEGORYA</PoppinTextBold>
           <CategoryCard
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("Amun");
+            }}
             source={require("../../assets/lottie/115619-learning-english.json")}
             title="AMUN"
             style={{

@@ -21,6 +21,11 @@ export type RootStackParamList = {
   Modal: undefined;
   NotFound: undefined;
   Landing: undefined;
+  Amun: undefined;
+};
+
+export type AmunStackParamList = {
+  AmunHome: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
