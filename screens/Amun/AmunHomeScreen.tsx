@@ -6,7 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { CategoryCard } from "../../components/Category";
 import { PoppinText } from "../../components/StyledText";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import AMUN_SELECTION from "../../data/AMUN_SELECTION";
+import AMUN_SELECTION from "../../data/GAME_SELECTION";
 import Amun from "../../models/Amun";
 
 export default function AmunHomeScreen() {
