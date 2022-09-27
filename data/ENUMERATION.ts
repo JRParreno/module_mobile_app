@@ -3,21 +3,21 @@ export default function ENUMERATION() {
     return [
         {
             "pk": "993221332",
-            "quarter_pk": "7113874452",
+            "activity_pk": "1234566",
             "image": require('../assets/lottie/amun_selection/102960-math-concept-6.json'),
             "question": "What is the tagalog of Dog?",
             "answer": "aso"
         },
         {
             "pk": "9932213442",
-            "quarter_pk": "7113874452",
+            "activity_pk": "1234566",
             "image": require('../assets/lottie/amun_selection/102960-math-concept-6.json'),
             "question": "What is the tagalog of Cat?",
             "answer": "pusa"
         },
         {
             "pk": "993221332",
-            "quarter_pk": "0214811335",
+            "activity_pk": "6654321",
             "direction": "Direction",
             "image": require('../assets/lottie/amun_selection/102960-math-concept-6.json'),
             "question": "What is the tagalog of Dog?",
@@ -25,7 +25,7 @@ export default function ENUMERATION() {
         },
         {
             "pk": "993221332",
-            "quarter_pk": "0214811335",
+            "activity_pk": "6654321",
             "direction": "Direction",
             "image": require('../assets/lottie/amun_selection/102960-math-concept-6.json'),
             "question": "What is the tagalog of Dog?",
