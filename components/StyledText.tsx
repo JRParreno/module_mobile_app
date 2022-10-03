@@ -1,3 +1,4 @@
+import { DefaultColor } from "../constants/Colors";
 import { Text, TextProps } from "./Themed";
 
 export function MonoText(props: TextProps) {
@@ -12,6 +13,22 @@ export function PoppinText(props: TextProps) {
       {...props}
       style={[
         { fontFamily: "poppins-regular", fontSize: 14, color: "#262626" },
+        props.style,
+      ]}
+    />
+  );
+}
+
+export function PoppinQuestiobText(props: TextProps) {
+  return (
+    <Text
+      {...props}
+      style={[
+        {
+          fontFamily: "poppins-regular",
+          fontSize: 18,
+          color: DefaultColor.black,
+        },
         props.style,
       ]}
     />

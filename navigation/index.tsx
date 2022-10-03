@@ -118,7 +118,13 @@ function RootNavigator() {
           component={LandingScreen}
           options={{ title: "", headerShown: false }}
         />
-        <Stack.Screen name="Amun" component={AmunNavigator} />
+        <Stack.Screen
+          name="Amun"
+          component={AmunNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
       <Modal
         testID={"modal"}

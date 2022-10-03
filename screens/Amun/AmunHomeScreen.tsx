@@ -1,16 +1,18 @@
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { CategoryCard } from "../../components/Category";
 import { PoppinText } from "../../components/StyledText";
 import ViewWithLoading from "../../components/ViewWithLoading";
+import { DefaultColor } from "../../constants/Colors";
 import AMUN_SELECTION from "../../data/GAME_SELECTION";
 import Amun from "../../models/Amun";
 
 export default function AmunHomeScreen() {
   const [loading, setLoading] = useState<boolean>(false);
+  const navigation = useNavigation();
   const [amun, setAmun] = useState<Array<Amun> | null>(null);
   const handleLoadAmun = () => {
     setLoading(true);
@@ -32,7 +34,13 @@ export default function AmunHomeScreen() {
             {amun.map((data: Amun) => (
               <CategoryCard
                 key={data.pk}
-                onPress={() => {}}
+                onPress={() => {
+                  // @ts-ignore
+                  navigation.navigate("Game", {
+                    amun: data,
+                  });
+                }}
+                style={{ backgroundColor: DefaultColor.danger }}
                 source={data.path}
                 title={data.title}
               />

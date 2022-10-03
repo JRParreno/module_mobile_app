@@ -12,7 +12,8 @@ export const DefaultColor = {
   lightGreen: '#C5E0B4',
   yellow: "#FFFF00",
   pink: "#FFC0CB",
-  brown: "#DFB072"
+  brown: "#DFB072",
+  custom: "#ECFF8F"
 
 }
 

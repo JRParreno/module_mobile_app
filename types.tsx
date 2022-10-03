@@ -9,6 +9,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Amun from "./models/Amun";
 
 declare global {
   namespace ReactNavigation {
@@ -26,6 +27,9 @@ export type RootStackParamList = {
 
 export type AmunStackParamList = {
   AmunHome: undefined;
+  Game: {
+    amun: Amun;
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

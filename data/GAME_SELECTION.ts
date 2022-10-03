@@ -9,17 +9,17 @@ export default function AMUN_SELECTION() {
         {
             "pk": "6053244471",
             "title": "MAPEH",
-            "path": require('../assets/lottie/amun_selection/114864-green-calculator.json')
+            "path": require('../assets/lottie/amun_selection/57191-female-creative-artist-with-ideas.json')
         },
         {
             "pk": "0742273369",
             "title": "ARALING PANLIPUNAN",
-            "path": require('../assets/lottie/amun_selection/114864-green-calculator.json')
+            "path": require('../assets/lottie/amun_selection/87521-suny-mountain-animated-icon.json')
         },
         {
             "pk": "1404318750",
             "title": "MOTHER TOUNGE 1",
-            "path": require('../assets/lottie/amun_selection/114864-green-calculator.json')
+            "path": require('../assets/lottie/amun_selection/114067-wink-tongue-out-emoji-animation.json')
         },
     ];
 }
