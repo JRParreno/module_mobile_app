@@ -7,6 +7,7 @@ import { LeksyonParamList } from "../../types";
 import {
   RouteProp,
   useFocusEffect,
+  useIsFocused,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
@@ -31,7 +32,6 @@ export default function LeksyonScreen() {
   const handleGetLesson = () => {
     setLoading(true);
     const lectures = LEKSYON();
-
     const getLecture = lectures.find(
       (data: Lecture) => (data.quarter_pk = quarter.pk)
     );
@@ -43,8 +43,10 @@ export default function LeksyonScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      handleGetLesson();
-    }, [])
+      setTimeout(() => {
+        handleGetLesson();
+      }, 100);
+    }, [useIsFocused()])
   );
 
   return (
@@ -56,6 +58,7 @@ export default function LeksyonScreen() {
               source={lecture.lesson}
               javaScriptEnabled={true}
               style={{ backgroundColor: DefaultColor.main }}
+              startInLoadingState={true}
             />
             <View style={{ marginHorizontal: 10 }}>
               <ButtonComponent
