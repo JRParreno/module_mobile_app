@@ -2,7 +2,7 @@
   "expo": {
     "name": "MTL",
     "slug": "module_mobile_app",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -26,7 +26,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.mtl.mobile"
+      "package": "com.mtl.mobile",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

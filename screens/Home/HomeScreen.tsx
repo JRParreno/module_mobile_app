@@ -26,7 +26,9 @@ export default function HomeScreen() {
             }}
           />
           <CategoryCard
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("Leksyon");
+            }}
             source={require("../../assets/lottie/61281-class-board.json")}
             title="LEKSYON"
             style={{

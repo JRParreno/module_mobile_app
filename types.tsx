@@ -10,6 +10,7 @@ import {
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Amun from "./models/Amun";
+import Quarter from "./models/Quarter";
 
 declare global {
   namespace ReactNavigation {
@@ -23,12 +24,20 @@ export type RootStackParamList = {
   NotFound: undefined;
   Landing: undefined;
   Amun: undefined;
+  Leksyon: undefined;
 };
 
 export type AmunStackParamList = {
   AmunHome: undefined;
   Game: {
     amun: Amun;
+  };
+};
+
+export type LeksyonParamList = {
+  LeksyonQuarter: undefined;
+  LeksyonView: {
+    quarter: Quarter;
   };
 };
 

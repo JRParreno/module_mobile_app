@@ -36,6 +36,7 @@ import Modal from "react-native-modal";
 import { PoppinText } from "../components/StyledText";
 import { Switch } from "react-native-elements";
 import AmunNavigator from "./AmunNavigator";
+import LeksyonNavigator from "./LeksyonNavigator";
 
 export default function Navigation({
   colorScheme,
@@ -123,6 +124,13 @@ function RootNavigator() {
         <Stack.Screen
           name="Amun"
           component={AmunNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Leksyon"
+          component={LeksyonNavigator}
           options={{
             headerShown: false,
           }}
