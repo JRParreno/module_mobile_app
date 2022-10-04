@@ -24,27 +24,12 @@ export default function AmunNavigator() {
         ),
         headerBackTitleVisible: false,
         title: "",
-        headerTransparent: true,
+        headerTitleAlign: "center",
+        headerStyle: { backgroundColor: DefaultColor.main },
+        headerShadowVisible: false,
       }}
     >
-      <Stack.Screen
-        name="AmunHome"
-        component={AmunHomeScreen}
-        options={(nav) => ({
-          headerLeft: () => (
-            <View style={{ flex: 0, zIndex: 1, position: "absolute" }}>
-              <Pressable
-                onPress={async () => {
-                  nav.navigation.goBack();
-                }}
-              >
-                <Ionicons name="chevron-back" size={30} color={"#045CC0"} />
-              </Pressable>
-            </View>
-          ),
-          headerBackButtonMenuEnabled: true,
-        })}
-      />
+      <Stack.Screen name="AmunHome" component={AmunHomeScreen} />
       <Stack.Screen
         name="Game"
         component={GameScreen}

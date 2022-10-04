@@ -88,7 +88,9 @@ function RootNavigator() {
   );
 
   return isInitialized ? (
-    <View style={{ flex: 1 }}>
+    <View
+      style={{ flex: 1, paddingTop: 10, backgroundColor: DefaultColor.main }}
+    >
       <Stack.Navigator
         screenOptions={{
           headerBackVisible: true,
