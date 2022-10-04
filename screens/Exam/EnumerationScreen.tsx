@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import {
   Dimensions,
   Pressable,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -16,12 +17,20 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import { PoppinText } from "../../components/StyledText";
+import {
+  PoppinQuestiobText,
+  PoppinText,
+  PoppinTextBold,
+} from "../../components/StyledText";
 import { DefaultColor } from "../../constants/Colors";
 import Activity from "../../models/Activity";
 import ACTIVITY from "../../data/ACTIVITY";
+import ENUMERATION from "../../data/ENUMERATION";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
+import Enumeration, { EnumAnswer } from "../../models/Enumeration";
+import { EnumerationCard } from "../../components/Enumeration";
+import { ButtonComponent } from "../../components/Button/StyledButton";
 
 type IType = {
   params: LeksyonParamList["LeksyonView"];
@@ -32,23 +41,56 @@ export default function EnumerationScreen() {
   const [loading, setLoading] = useState<boolean>(false);
   const [activity, setActivity] = useState<Activity | null>(null);
   const [isModalVisible, setModalVisible] = useState(true);
+  const [answers, setAnswers] = useState<Array<EnumAnswer>>([]);
+
+  const [enumerations, setEnumerations] = useState<Array<Enumeration> | null>(
+    null
+  );
+  const [enumeration, setEnumeration] = useState<Enumeration | null>(null);
+  const [answer, setAnswer] = useState<string | null>(null);
+  const [isDone, setIsDone] = useState(false);
+  const [isSubmitModal, setIsSubmitModal] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const route = useRoute<RouteProp<IType, "params">>();
+  const quarter = route.params.quarter;
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-  const route = useRoute<RouteProp<IType, "params">>();
-  const quarter = route.params.quarter;
+
+  const toggleSubmitModal = () => {
+    setIsSubmitModal(!isSubmitModal);
+  };
 
   const handleGetLesson = () => {
     setLoading(true);
     const activities = ACTIVITY();
+    const enumerationsData = ENUMERATION();
 
     const getActivity = activities.find(
       (data: Activity) => (data.quarter_pk = quarter.pk)
     );
+    const filterEnumeration = enumerationsData.filter(
+      (data: Enumeration) => data.quarter_pk === quarter.pk
+    );
+
     if (getActivity) {
       setActivity(getActivity);
     }
+    if (filterEnumeration.length > 0) {
+      setEnumerations(filterEnumeration);
+    }
     setLoading(false);
+  };
+
+  const handleOnNext = () => {
+    toggleSubmitModal();
+    if (enumerations && currentIndex !== enumerations.length) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+  const toggleIsDoneModal = () => {
+    setIsDone(!isDone);
   };
 
   useFocusEffect(
@@ -57,22 +99,148 @@ export default function EnumerationScreen() {
     }, [])
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      if (
+        enumerations &&
+        enumerations.length > 0 &&
+        currentIndex === enumerations.length &&
+        !isSubmitModal
+      ) {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          toggleIsDoneModal();
+        }, 2000);
+      }
+    }, [isSubmitModal])
+  );
+
+  const handleSubmit = () => {
+    if (enumeration) {
+      const myAnswer = new EnumAnswer(
+        quarter.pk,
+        enumeration.pk,
+        answer ? answer : "",
+        enumeration.answer.length > 0
+          ? enumeration.answer === answer
+          : undefined
+      );
+      setAnswers(answers.concat([myAnswer]));
+      toggleSubmitModal();
+      return;
+    }
+  };
+
+  const getScore = () => {
+    let total = 0;
+    let totalReview = 0;
+    answers.map((data: EnumAnswer) => {
+      if (data.is_correct !== undefined) {
+        total += data.is_correct ? 1 : 0;
+      } else {
+        totalReview += 1;
+      }
+    });
+    return {
+      total: `${total.toString()}/${answers.length.toString()}`,
+      totalReview: totalReview,
+    };
+  };
+
   return (
     <ViewWithLoading loading={loading}>
       <View style={styles.container}>
-        <View style={styles.storyContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              toggleModal();
-            }}
-          >
-            <View style={styles.btnViewStyle}>
-              <Ionicons name="book" size={24} />
-              <PoppinText> Show Activity</PoppinText>
+        {enumerations && currentIndex !== enumerations.length ? (
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={styles.storyContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal();
+                }}
+              >
+                <View style={styles.btnViewStyle}>
+                  <Ionicons name="book" size={24} />
+                  <PoppinText> Show Activity</PoppinText>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
+            {enumerations &&
+              currentIndex !== enumerations.length &&
+              enumerations.length > 0 && (
+                <EnumerationCard
+                  key={enumerations[currentIndex].pk}
+                  data={enumerations[currentIndex]}
+                  index={currentIndex}
+                  setEnum={setEnumeration}
+                  setAnswer={setAnswer}
+                />
+              )}
+            <ButtonComponent
+              title="Submit"
+              backgroundColor={DefaultColor.brown}
+              onPress={handleSubmit}
+            />
+          </ScrollView>
+        ) : (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <PoppinText>No data found</PoppinText>
+          </View>
+        )}
       </View>
+      {enumeration && (
+        <Modal
+          testID={"modal"}
+          isVisible={isSubmitModal}
+          backdropColor="#B4B3DB"
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}
+        >
+          <View style={styles.scoreModalContainer}>
+            <View style={styles.titleContainer}>
+              <PoppinTextBold
+                style={{
+                  color: answer
+                    ? enumeration.answer === answer
+                      ? DefaultColor.main
+                      : DefaultColor.danger
+                    : DefaultColor.danger,
+                }}
+              >
+                {enumeration.answer.length > 0
+                  ? enumeration.answer === answer
+                    ? "CORRECT ANSWER!"
+                    : "WRONG ANSWER!"
+                  : "This question will be check by your teacher"}
+              </PoppinTextBold>
+              {enumeration.answer.length > 0 && enumeration.answer !== answer && (
+                <React.Fragment>
+                  <PoppinQuestiobText>Correct Answer:</PoppinQuestiobText>
+                  <PoppinQuestiobText>{enumeration.answer}</PoppinQuestiobText>
+                </React.Fragment>
+              )}
+            </View>
+            <Pressable onPress={handleOnNext} style={styles.closeContainer}>
+              <PoppinText
+                style={{
+                  fontFamily: "poppins-regular",
+                  fontSize: 14,
+                  color: DefaultColor.white,
+                }}
+              >
+                NEXT
+              </PoppinText>
+            </Pressable>
+          </View>
+        </Modal>
+      )}
       {activity && (
         <Modal
           testID={"modal"}
@@ -106,6 +274,57 @@ export default function EnumerationScreen() {
           </View>
         </Modal>
       )}
+      {answers.length > 0 && (
+        <Modal
+          testID={"modal"}
+          isVisible={isDone}
+          backdropColor="#B4B3DB"
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}
+        >
+          <View style={styles.scoreModalContainer}>
+            <View style={styles.titleContainer}>
+              <PoppinTextBold
+                style={{
+                  color: DefaultColor.main,
+                }}
+              >
+                CONGRATULATIONS!
+              </PoppinTextBold>
+              <PoppinQuestiobText>
+                Your score is {getScore().total}
+              </PoppinQuestiobText>
+              {getScore().totalReview > 0 && (
+                <PoppinQuestiobText>
+                  Will be review {getScore().totalReview.toString()}
+                </PoppinQuestiobText>
+              )}
+            </View>
+            <Pressable
+              onPress={() => {
+                toggleIsDoneModal();
+                navigation.goBack();
+              }}
+              style={styles.closeContainer}
+            >
+              <PoppinText
+                style={{
+                  fontFamily: "poppins-regular",
+                  fontSize: 14,
+                  color: DefaultColor.white,
+                }}
+              >
+                Back
+              </PoppinText>
+            </Pressable>
+          </View>
+        </Modal>
+      )}
     </ViewWithLoading>
   );
 }
@@ -117,6 +336,7 @@ const styles = StyleSheet.create({
   },
   storyContainer: {
     flex: 0,
+    marginBottom: 10,
   },
   btnViewStyle: {
     minWidth: 80,
@@ -146,6 +366,18 @@ const styles = StyleSheet.create({
     margin: 20,
     borderWidth: 1,
     borderColor: DefaultColor.danger,
+    borderRadius: 20,
+  },
+  titleContainer: {
+    flex: 0,
+    marginBottom: 10,
+  },
+  scoreModalContainer: {
+    backgroundColor: DefaultColor.white,
+    minHeight: 100,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: DefaultColor.white,
     borderRadius: 20,
   },
 });

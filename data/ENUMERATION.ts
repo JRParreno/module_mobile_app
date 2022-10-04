@@ -1,4 +1,4 @@
-function ENUMERATION() {
+export default function ENUMERATION() {
     // kindly match the quarter_pk in QUARTER.ts file
     return [
         {
@@ -220,7 +220,3 @@ function ENUMERATION() {
         },
     ];
 }
-
-ENUMERATION().map((data) => {
-    console.log(data);
-});
