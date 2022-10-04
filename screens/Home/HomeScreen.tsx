@@ -36,7 +36,9 @@ export default function HomeScreen() {
             }}
           />
           <CategoryCard
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("Exam");
+            }}
             source={require("../../assets/lottie/72170-books.json")}
             title="PAGSUSULIT"
             style={{

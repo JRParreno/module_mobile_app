@@ -37,6 +37,7 @@ import { PoppinText } from "../components/StyledText";
 import { Switch } from "react-native-elements";
 import AmunNavigator from "./AmunNavigator";
 import LeksyonNavigator from "./LeksyonNavigator";
+import ExamNavigator from "./ExamNavigator";
 
 export default function Navigation({
   colorScheme,
@@ -131,6 +132,13 @@ function RootNavigator() {
         <Stack.Screen
           name="Leksyon"
           component={LeksyonNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Exam"
+          component={ExamNavigator}
           options={{
             headerShown: false,
           }}

@@ -25,6 +25,7 @@ export type RootStackParamList = {
   Landing: undefined;
   Amun: undefined;
   Leksyon: undefined;
+  Exam: undefined;
 };
 
 export type AmunStackParamList = {
@@ -37,6 +38,13 @@ export type AmunStackParamList = {
 export type LeksyonParamList = {
   LeksyonQuarter: undefined;
   LeksyonView: {
+    quarter: Quarter;
+  };
+};
+
+export type ExamParamList = {
+  ExamQuarter: undefined;
+  ExamView: {
     quarter: Quarter;
   };
 };

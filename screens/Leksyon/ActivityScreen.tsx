@@ -10,33 +10,33 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import Lecture from "../../models/Lecture";
-import LEKSYON from "../../data/LEKSYON";
 import { PoppinText } from "../../components/StyledText";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 import { DefaultColor } from "../../constants/Colors";
+import Activity from "../../models/Activity";
+import ACTIVITY from "../../data/ACTIVITY";
 
 type IType = {
   params: LeksyonParamList["LeksyonView"];
 };
 
-export default function LeksyonScreen() {
+export default function ActivityScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
-  const [lecture, setLecture] = useState<Lecture | null>(null);
+  const [activity, setActivity] = useState<Activity | null>(null);
 
   const route = useRoute<RouteProp<IType, "params">>();
   const quarter = route.params.quarter;
 
   const handleGetLesson = () => {
     setLoading(true);
-    const lectures = LEKSYON();
+    const activities = ACTIVITY();
 
-    const getLecture = lectures.find(
-      (data: Lecture) => (data.quarter_pk = quarter.pk)
+    const getActivity = activities.find(
+      (data: Activity) => (data.quarter_pk = quarter.pk)
     );
-    if (getLecture) {
-      setLecture(getLecture);
+    if (getActivity) {
+      setActivity(getActivity);
     }
     setLoading(false);
   };
@@ -50,33 +50,27 @@ export default function LeksyonScreen() {
   return (
     <ViewWithLoading loading={loading}>
       <View style={styles.container}>
-        {!loading && lecture && (
+        {!loading && activity && (
           <React.Fragment>
             <WebView
-              source={lecture.lesson}
+              source={activity.story}
               javaScriptEnabled={true}
               style={{ backgroundColor: DefaultColor.main }}
             />
             <View style={{ marginHorizontal: 10 }}>
               <ButtonComponent
                 title="Go to Activity"
-                onPress={() => {
-                  // @ts-ignore
-                  navigation.navigate("Exam", {
-                    params: { quarter: quarter },
-                    screen: "ExamView",
-                  });
-                }}
+                onPress={() => {}}
                 backgroundColor={DefaultColor.danger}
               />
             </View>
           </React.Fragment>
         )}
-        {!loading && lecture === null && (
+        {!loading && activity === null && (
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
-            <PoppinText>Lecture is empty</PoppinText>
+            <PoppinText>Activity is empty</PoppinText>
             <TouchableOpacity
               onPress={() => {
                 navigation.goBack();

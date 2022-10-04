@@ -17,21 +17,30 @@ interface IProps {
   quarter: Quarter;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  isExam?: boolean;
+  title?: string;
 }
 
 export default function QuarterCard(props: IProps) {
   const navigation = useNavigation();
-  const { quarter, style, textStyle } = props;
+  const { quarter, style, textStyle, isExam, title } = props;
 
   return (
     <TouchableOpacity
       onPress={() => {
-        // @ts-ignore
-        navigation.navigate("LeksyonView", { quarter: quarter });
+        if (isExam !== undefined && isExam) {
+          // @ts-ignore
+          navigation.navigate("ExamView", { quarter: quarter });
+        } else {
+          // @ts-ignore
+          navigation.navigate("LeksyonView", { quarter: quarter });
+        }
       }}
       style={[styles.container, style]}
     >
-      <PoppinText style={textStyle}>{quarter.title}</PoppinText>
+      <PoppinText style={textStyle}>
+        {isExam && title ? title : quarter.title}
+      </PoppinText>
     </TouchableOpacity>
   );
 }
