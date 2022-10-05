@@ -35,6 +35,7 @@
     "expo-updates": "~0.14.6",
     "expo-web-browser": "~11.0.0",
     "fbjs": "^3.0.4",
+    "install": "^0.13.0",
     "lottie-ios": "^3.4.3",
     "lottie-react-native": "^5.1.4",
     "react": "18.0.0",

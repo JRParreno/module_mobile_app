@@ -42,6 +42,11 @@
     "plugins": [
       "@config-plugins/react-native-blob-util",
       "@config-plugins/react-native-pdf"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c7207d35-12ca-4fc0-b21a-4e8610951bfb"
+      }
+    }
   }
 }
