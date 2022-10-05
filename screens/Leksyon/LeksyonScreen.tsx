@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
 import { WebView } from "react-native-webview";
 import { LeksyonParamList } from "../../types";
@@ -12,10 +12,10 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import Lecture from "../../models/Lecture";
-import LEKSYON from "../../data/LEKSYON";
 import { PoppinText } from "../../components/StyledText";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 import { DefaultColor } from "../../constants/Colors";
+import Pdf from "react-native-pdf";
 
 type IType = {
   params: LeksyonParamList["LeksyonView"];
@@ -48,11 +48,22 @@ export default function LeksyonScreen() {
       <View style={styles.container}>
         {!loading && lecture && (
           <React.Fragment>
-            <WebView
+            <Pdf
+              trustAllCerts={false}
               source={lecture.lesson}
-              javaScriptEnabled={true}
-              style={{ backgroundColor: DefaultColor.main }}
-              startInLoadingState={true}
+              onLoadComplete={(numberOfPages, filePath) => {
+                console.log(`Number of pages: ${numberOfPages}`);
+              }}
+              onPageChanged={(page, numberOfPages) => {
+                console.log(`Current page: ${page}`);
+              }}
+              onError={(error) => {
+                console.log(error);
+              }}
+              onPressLink={(uri) => {
+                console.log(`Link pressed: ${uri}`);
+              }}
+              style={styles.pdf}
             />
             <View style={{ marginHorizontal: 10 }}>
               <ButtonComponent
@@ -88,5 +99,10 @@ export default function LeksyonScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  pdf: {
+    flex: 1,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });

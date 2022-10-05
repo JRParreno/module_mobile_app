@@ -30,6 +30,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Enumeration, { EnumAnswer } from "../../models/Enumeration";
 import { EnumerationCard } from "../../components/Enumeration";
 import { ButtonComponent } from "../../components/Button/StyledButton";
+import Pdf from "react-native-pdf";
 
 type IType = {
   params: ExamParamList["ExamView"];
@@ -249,9 +250,22 @@ export default function EnumerationScreen() {
           backdropTransitionOutTiming={600}
         >
           <View style={styles.modalContainer}>
-            <WebView
+            <Pdf
+              trustAllCerts={false}
               source={activity.story}
-              style={{ borderWidth: 1, borderColor: DefaultColor.white }}
+              onLoadComplete={(numberOfPages, filePath) => {
+                console.log(`Number of pages: ${numberOfPages}`);
+              }}
+              onPageChanged={(page, numberOfPages) => {
+                console.log(`Current page: ${page}`);
+              }}
+              onError={(error) => {
+                console.log(error);
+              }}
+              onPressLink={(uri) => {
+                console.log(`Link pressed: ${uri}`);
+              }}
+              style={styles.pdf}
             />
 
             <Pressable onPress={toggleModal} style={styles.closeContainer}>
@@ -373,5 +387,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DefaultColor.white,
     borderRadius: 20,
+  },
+  pdf: {
+    flex: 1,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });
