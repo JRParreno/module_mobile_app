@@ -9,7 +9,9 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Activity from "./models/Activity";
 import Amun from "./models/Amun";
+import Lecture from "./models/Lecture";
 import Quarter from "./models/Quarter";
 
 declare global {
@@ -38,6 +40,12 @@ export type AmunStackParamList = {
 export type LeksyonParamList = {
   LeksyonQuarter: undefined;
   LeksyonView: {
+    lecture: Lecture;
+  };
+  Activities: {
+    lecture: Lecture;
+  };
+  Lectures: {
     quarter: Quarter;
   };
 };
@@ -45,6 +53,9 @@ export type LeksyonParamList = {
 export type ExamParamList = {
   ExamQuarter: undefined;
   ExamView: {
+    activity: Activity;
+  };
+  ExamList: {
     quarter: Quarter;
   };
 };

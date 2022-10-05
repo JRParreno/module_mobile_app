@@ -5,7 +5,11 @@ import { AmunHomeScreen, GameScreen } from "../screens/Amun";
 import { Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { DefaultColor } from "../constants/Colors";
-import { EnumerationScreen, QuarterExamScreen } from "../screens/Exam";
+import {
+  EnumerationScreen,
+  LectureActivityScreen,
+  QuarterExamScreen,
+} from "../screens/Exam";
 
 const Stack = createNativeStackNavigator<ExamParamList>();
 
@@ -31,6 +35,13 @@ export default function ExamNavigator() {
       }}
     >
       <Stack.Screen name="ExamQuarter" component={QuarterExamScreen} />
+      <Stack.Screen
+        name="ExamList"
+        component={LectureActivityScreen}
+        options={(nav) => ({
+          title: "Pumili ng activity",
+        })}
+      />
       <Stack.Screen
         name="ExamView"
         component={EnumerationScreen}

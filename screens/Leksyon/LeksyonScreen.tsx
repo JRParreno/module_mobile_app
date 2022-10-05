@@ -27,17 +27,11 @@ export default function LeksyonScreen() {
   const [lecture, setLecture] = useState<Lecture | null>(null);
 
   const route = useRoute<RouteProp<IType, "params">>();
-  const quarter = route.params.quarter;
+  const lectureRoute = route.params.lecture;
 
   const handleGetLesson = () => {
     setLoading(true);
-    const lectures = LEKSYON();
-    const getLecture = lectures.find(
-      (data: Lecture) => (data.quarter_pk = quarter.pk)
-    );
-    if (getLecture) {
-      setLecture(getLecture);
-    }
+    setLecture(lectureRoute);
     setLoading(false);
   };
 
@@ -65,10 +59,7 @@ export default function LeksyonScreen() {
                 title="Go to Activity"
                 onPress={() => {
                   // @ts-ignore
-                  navigation.navigate("Exam", {
-                    params: { quarter: quarter },
-                    screen: "ExamView",
-                  });
+                  navigation.navigate("Activities", { lecture: lecture });
                 }}
                 backgroundColor={DefaultColor.danger}
               />

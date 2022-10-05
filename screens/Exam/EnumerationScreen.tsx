@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
 import { WebView } from "react-native-webview";
-import { LeksyonParamList } from "../../types";
+import { ExamParamList, LeksyonParamList } from "../../types";
 import {
   RouteProp,
   useFocusEffect,
@@ -23,7 +23,6 @@ import {
   PoppinTextBold,
 } from "../../components/StyledText";
 import { DefaultColor } from "../../constants/Colors";
-import Activity from "../../models/Activity";
 import ACTIVITY from "../../data/ACTIVITY";
 import ENUMERATION from "../../data/ENUMERATION";
 import Modal from "react-native-modal";
@@ -33,14 +32,17 @@ import { EnumerationCard } from "../../components/Enumeration";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 
 type IType = {
-  params: LeksyonParamList["LeksyonView"];
+  params: ExamParamList["ExamView"];
 };
 
 export default function EnumerationScreen() {
+  const route = useRoute<RouteProp<IType, "params">>();
+  const activity = route.params.activity;
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
-  const [activity, setActivity] = useState<Activity | null>(null);
-  const [isModalVisible, setModalVisible] = useState(true);
+  const [isModalVisible, setModalVisible] = useState(
+    activity.story ? true : false
+  );
   const [answers, setAnswers] = useState<Array<EnumAnswer>>([]);
 
   const [enumerations, setEnumerations] = useState<Array<Enumeration> | null>(
@@ -51,8 +53,6 @@ export default function EnumerationScreen() {
   const [isDone, setIsDone] = useState(false);
   const [isSubmitModal, setIsSubmitModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const route = useRoute<RouteProp<IType, "params">>();
-  const quarter = route.params.quarter;
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -64,19 +64,11 @@ export default function EnumerationScreen() {
 
   const handleGetLesson = () => {
     setLoading(true);
-    const activities = ACTIVITY();
     const enumerationsData = ENUMERATION();
 
-    const getActivity = activities.find(
-      (data: Activity) => (data.quarter_pk = quarter.pk)
-    );
     const filterEnumeration = enumerationsData.filter(
-      (data: Enumeration) => data.quarter_pk === quarter.pk
+      (data: Enumeration) => data.activity_pk === activity.pk
     );
-
-    if (getActivity) {
-      setActivity(getActivity);
-    }
     if (filterEnumeration.length > 0) {
       setEnumerations(filterEnumeration);
     }
@@ -119,7 +111,7 @@ export default function EnumerationScreen() {
   const handleSubmit = () => {
     if (enumeration) {
       const myAnswer = new EnumAnswer(
-        quarter.pk,
+        activity.pk,
         enumeration.pk,
         answer ? answer : "",
         enumeration.answer.length > 0
@@ -153,18 +145,20 @@ export default function EnumerationScreen() {
       <View style={styles.container}>
         {enumerations && currentIndex !== enumerations.length ? (
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <View style={styles.storyContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal();
-                }}
-              >
-                <View style={styles.btnViewStyle}>
-                  <Ionicons name="book" size={24} />
-                  <PoppinText> Show Activity</PoppinText>
-                </View>
-              </TouchableOpacity>
-            </View>
+            {activity && activity.story && (
+              <View style={styles.storyContainer}>
+                <TouchableOpacity
+                  onPress={() => {
+                    toggleModal();
+                  }}
+                >
+                  <View style={styles.btnViewStyle}>
+                    <Ionicons name="book" size={24} />
+                    <PoppinText> Show Activity</PoppinText>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
             {enumerations &&
               currentIndex !== enumerations.length &&
               enumerations.length > 0 && (

@@ -4,7 +4,12 @@ import { LeksyonParamList } from "../types";
 import { Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { DefaultColor } from "../constants/Colors";
-import { LeksyonScreen, QuarterScreen } from "../screens/Leksyon";
+import {
+  ActivitiesScreen,
+  LecturesScreen,
+  LeksyonScreen,
+  QuarterScreen,
+} from "../screens/Leksyon";
 
 const Stack = createNativeStackNavigator<LeksyonParamList>();
 
@@ -41,6 +46,20 @@ export default function LeksyonNavigator() {
         component={LeksyonScreen}
         options={{
           title: "Leksyon",
+        }}
+      />
+      <Stack.Screen
+        name="Lectures"
+        component={LecturesScreen}
+        options={{
+          title: "Pumili ng leksyon",
+        }}
+      />
+      <Stack.Screen
+        name="Activities"
+        component={ActivitiesScreen}
+        options={{
+          title: "Pumili ng activity",
         }}
       />
     </Stack.Navigator>

@@ -9,33 +9,33 @@ import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { ListItem } from "react-native-elements";
 import ViewWithLoading from "../../components/ViewWithLoading";
+import LEKSYON from "../../data/LEKSYON";
+import Lecture from "../../models/Lecture";
 import { LeksyonParamList } from "../../types";
 import Lottie from "lottie-react-native";
 import { DefaultColor } from "../../constants/Colors";
-import Activity from "../../models/Activity";
-import ACTIVITY from "../../data/ACTIVITY";
 
 type IType = {
-  params: LeksyonParamList["Activities"];
+  params: LeksyonParamList["Lectures"];
 };
 
-export default function ActivitiesScreen() {
+export default function LecturesScreen() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [activites, setActivities] = useState<Array<Activity>>([]);
+  const [lectures, setLectures] = useState<Array<Lecture>>([]);
   const route = useRoute<RouteProp<IType, "params">>();
-  const lecture = route.params.lecture;
+  const quarter = route.params.quarter;
   const navigation = useNavigation();
-  const handleGetActivities = () => {
-    const lecturesData = ACTIVITY().filter(
-      (data: Activity) => data.lesson_pk === lecture.pk
+  const handleGetLectures = () => {
+    const lecturesData = LEKSYON().filter(
+      (data: Lecture) => data.quarter_pk === quarter.pk
     );
-    setActivities(lecturesData);
+    setLectures(lecturesData);
     setLoading(false);
   };
 
   useFocusEffect(
     useCallback(() => {
-      handleGetActivities();
+      handleGetLectures();
     }, [])
   );
   return (
@@ -44,7 +44,7 @@ export default function ActivitiesScreen() {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.lottieContainer}>
             <Lottie
-              source={require("../../assets/lottie/101088-kids-studying-from-home.json")}
+              source={require("../../assets/lottie/61281-class-board.json")}
               autoPlay={true}
               loop={true}
               style={{
@@ -53,7 +53,7 @@ export default function ActivitiesScreen() {
             />
           </View>
           <View style={{ flex: 3 }}>
-            {activites.map((data: Activity, index: number) => (
+            {lectures.map((data: Lecture, index: number) => (
               <ListItem
                 key={data.pk}
                 bottomDivider
@@ -62,15 +62,12 @@ export default function ActivitiesScreen() {
                 containerStyle={styles.listStyle}
                 onPress={() => {
                   // @ts-ignore
-                  navigation.navigate("Exam", {
-                    params: { activity: data },
-                    screen: "ExamView",
-                  });
+                  navigation.navigate("LeksyonView", { lecture: data });
                 }}
               >
                 <ListItem.Content>
                   <ListItem.Title style={styles.listTextStyle}>
-                    Activity {index + 1}
+                    Lesson {index + 1}
                   </ListItem.Title>
                 </ListItem.Content>
                 <ListItem.Chevron tvParallaxProperties />

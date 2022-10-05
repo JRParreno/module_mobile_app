@@ -30,10 +30,10 @@ export default function QuarterCard(props: IProps) {
       onPress={() => {
         if (isExam !== undefined && isExam) {
           // @ts-ignore
-          navigation.navigate("ExamView", { quarter: quarter });
+          navigation.navigate("ExamList", { quarter: quarter });
         } else {
           // @ts-ignore
-          navigation.navigate("LeksyonView", { quarter: quarter });
+          navigation.navigate("Lectures", { quarter: quarter });
         }
       }}
       style={[styles.container, style]}
