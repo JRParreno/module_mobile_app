@@ -1,6 +1,12 @@
 import * as React from "react";
 import { useCallback, useState } from "react";
-import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
 import { WebView } from "react-native-webview";
 import { LeksyonParamList } from "../../types";
@@ -50,7 +56,13 @@ export default function LeksyonScreen() {
           <React.Fragment>
             <Pdf
               trustAllCerts={false}
-              source={lecture.lesson}
+              source={
+                Platform.OS === "ios"
+                  ? lecture.lesson
+                  : {
+                      uri: `bundle-assets://${lecture.path}`,
+                    }
+              }
               onLoadComplete={(numberOfPages, filePath) => {
                 console.log(`Number of pages: ${numberOfPages}`);
               }}

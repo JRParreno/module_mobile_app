@@ -2,6 +2,7 @@ import * as React from "react";
 import { useCallback, useState } from "react";
 import {
   Dimensions,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -252,7 +253,13 @@ export default function EnumerationScreen() {
           <View style={styles.modalContainer}>
             <Pdf
               trustAllCerts={false}
-              source={activity.story}
+              source={
+                Platform.OS === "ios"
+                  ? activity.story
+                  : {
+                      uri: `bundle-assets://${activity.path}`,
+                    }
+              }
               onLoadComplete={(numberOfPages, filePath) => {
                 console.log(`Number of pages: ${numberOfPages}`);
               }}

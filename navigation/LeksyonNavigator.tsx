@@ -59,7 +59,7 @@ export default function LeksyonNavigator() {
         name="Activities"
         component={ActivitiesScreen}
         options={{
-          title: "Pumili ng activity",
+          title: "Pumili ng Pagsusulit",
         }}
       />
     </Stack.Navigator>

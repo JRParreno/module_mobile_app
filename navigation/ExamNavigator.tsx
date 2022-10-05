@@ -39,7 +39,7 @@ export default function ExamNavigator() {
         name="ExamList"
         component={LectureActivityScreen}
         options={(nav) => ({
-          title: "Pumili ng activity",
+          title: "Pumili ng Pagsusulit",
         })}
       />
       <Stack.Screen
