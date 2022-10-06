@@ -2,11 +2,10 @@ import * as React from "react";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import { PoppinText, PoppinTextBold } from "../../components/StyledText";
+import { PoppinTextBold } from "../../components/StyledText";
 import { CategoryCard } from "../../components/Category";
 import { DefaultColor } from "../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,9 +47,6 @@ export default function HomeScreen() {
           />
         </View>
       </ScrollView>
-      <View style={{ flex: 0 }}>
-        <PoppinText>V1.0.8</PoppinText>
-      </View>
     </ViewWithLoading>
   );
 }

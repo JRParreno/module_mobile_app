@@ -10,25 +10,32 @@ import { PoppinText } from "../StyledText";
 interface IProps {
   data: Enumeration;
   index: number;
-  setEnum: (_: Enumeration) => void;
-  setAnswer: (_: string) => void;
+  myAnswer: string;
+  isCorrect?: boolean;
 }
 
-export default function EnumerationCard(props: IProps) {
+export default function ExamCard(props: IProps) {
   const [loading, setLoading] = useState<boolean>(false);
-  const [text, setText] = useState("");
+  const { data, index, myAnswer, isCorrect } = props;
 
-  const { data, index, setAnswer, setEnum } = props;
+  const [text, setText] = useState(myAnswer);
+
   const { activity_pk, answer, pk, question } = data;
 
-  useFocusEffect(
-    useCallback(() => {
-      setEnum(data);
-      setText("");
-    }, [data])
-  );
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          borderColor:
+            isCorrect === undefined
+              ? DefaultColor.brown
+              : !isCorrect
+              ? DefaultColor.danger
+              : DefaultColor.yellow,
+        },
+      ]}
+    >
       <PoppinText>
         {index + 1}. {question}
       </PoppinText>
@@ -36,11 +43,8 @@ export default function EnumerationCard(props: IProps) {
         <TextInput
           label="Sagot"
           value={text}
-          onChangeText={(text) => {
-            setText(text);
-            setAnswer(text);
-          }}
           mode={"outlined"}
+          disabled={true}
         />
       </View>
     </View>

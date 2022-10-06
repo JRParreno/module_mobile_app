@@ -32,6 +32,9 @@ import Enumeration, { EnumAnswer } from "../../models/Enumeration";
 import { EnumerationCard } from "../../components/Enumeration";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 import Pdf from "react-native-pdf";
+import { useDispatch, useSelector } from "react-redux";
+import { addQuizScore } from "../../redux/actions/scoreAction";
+import { QuizScore } from "../../models/Score";
 
 type IType = {
   params: ExamParamList["ExamView"];
@@ -55,6 +58,7 @@ export default function EnumerationScreen() {
   const [isDone, setIsDone] = useState(false);
   const [isSubmitModal, setIsSubmitModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const dispatch = useDispatch();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -102,6 +106,8 @@ export default function EnumerationScreen() {
         !isSubmitModal
       ) {
         setLoading(true);
+        dispatch(addQuizScore(new QuizScore(answers, activity.pk)));
+
         setTimeout(() => {
           setLoading(false);
           toggleIsDoneModal();

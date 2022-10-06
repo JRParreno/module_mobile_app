@@ -1,0 +1,4 @@
+// START CART
+export const ADD_SCORE_GAME = 'ADD_SCORE_GAME';
+export const ADD_SCORE_QUIZ = 'ADD_SCORE_QUIZ';
+// END CART 

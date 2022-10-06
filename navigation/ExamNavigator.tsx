@@ -7,7 +7,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { DefaultColor } from "../constants/Colors";
 import {
   EnumerationScreen,
+  ExamScoreScreen,
   LectureActivityScreen,
+  OverviewExamScreen,
   QuarterExamScreen,
 } from "../screens/Exam";
 
@@ -45,6 +47,20 @@ export default function ExamNavigator() {
       <Stack.Screen
         name="ExamView"
         component={EnumerationScreen}
+        options={(nav) => ({
+          title: "Pagsusulit",
+        })}
+      />
+      <Stack.Screen
+        name="ExamScore"
+        component={ExamScoreScreen}
+        options={(nav) => ({
+          title: "Score",
+        })}
+      />
+      <Stack.Screen
+        name="OverviewExamScore"
+        component={OverviewExamScreen}
         options={(nav) => ({
           title: "Pagsusulit",
         })}

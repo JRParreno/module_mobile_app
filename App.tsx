@@ -4,6 +4,10 @@ import "react-native-gesture-handler";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import React from "react";
+import store from "./redux/store";
+import { Provider as StoreProvider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -13,10 +17,14 @@ export default function App() {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
+      <StoreProvider store={store().store}>
+        <PersistGate loading={null} persistor={store().persistor}>
+          <SafeAreaProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </SafeAreaProvider>
+        </PersistGate>
+      </StoreProvider>
     );
   }
 }

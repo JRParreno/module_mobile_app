@@ -18,6 +18,9 @@ import { DefaultColor } from "../../constants/Colors";
 import Activity from "../../models/Activity";
 import ACTIVITY from "../../data/ACTIVITY";
 import { PoppinText } from "../../components/StyledText";
+import { useSelector } from "react-redux";
+import { AppStateStore } from "../../redux/store";
+import { QuizScore } from "../../models/Score";
 
 type IType = {
   params: ExamParamList["ExamList"];
@@ -31,6 +34,7 @@ export default function LectureActivityScreen() {
       activities: Array<Activity>;
     }>
   >([]);
+  const appState = useSelector((state: AppStateStore) => state.score);
 
   const route = useRoute<RouteProp<IType, "params">>();
   const quarter = route.params.quarter;
@@ -50,6 +54,15 @@ export default function LectureActivityScreen() {
     });
     setLectures(tempData);
     setLoading(false);
+  };
+
+  const getActivityScores = (pk: string) => {
+    const quizzes = appState.score.quizzes;
+    let myQuizzes: Array<QuizScore> = [];
+    if (quizzes.length > 0) {
+      myQuizzes = quizzes.filter((data: QuizScore) => data.activity_pk === pk);
+    }
+    return myQuizzes;
   };
 
   useFocusEffect(
@@ -79,7 +92,7 @@ export default function LectureActivityScreen() {
               ) => (
                 <View
                   key={index.toString()}
-                  style={[styles.listStyle, { padding: 10 }]}
+                  style={[styles.listStyle, { padding: 10, borderRadius: 10 }]}
                 >
                   <PoppinText
                     style={{ color: DefaultColor.white, marginBottom: 10 }}
@@ -87,27 +100,60 @@ export default function LectureActivityScreen() {
                     Lesson {index + 1}
                   </PoppinText>
                   {data.activities.map((activity: Activity, index: number) => (
-                    <ListItem
-                      key={index.toString()}
-                      bottomDivider
-                      hasTVPreferredFocus={undefined}
-                      tvParallaxProperties={undefined}
-                      containerStyle={[
-                        styles.listStyle,
-                        data.activities.length > 1 && { marginBottom: 5 },
-                      ]}
-                      onPress={() => {
-                        // @ts-ignore
-                        navigation.navigate("ExamView", { activity: activity });
-                      }}
-                    >
-                      <ListItem.Content>
-                        <ListItem.Title style={styles.listTextStyle}>
-                          Activity {index + 1}
-                        </ListItem.Title>
-                      </ListItem.Content>
-                      <ListItem.Chevron tvParallaxProperties />
-                    </ListItem>
+                    <React.Fragment key={index.toString()}>
+                      <ListItem
+                        bottomDivider
+                        hasTVPreferredFocus={undefined}
+                        tvParallaxProperties={undefined}
+                        containerStyle={[
+                          styles.listStyle,
+                          {
+                            borderBottomWidth:
+                              getActivityScores(activity.pk).length > 0 ? 0 : 1,
+                          },
+                          data.activities.length > 1 && { marginBottom: 5 },
+                        ]}
+                        onPress={() => {
+                          // @ts-ignore
+                          navigation.navigate("ExamView", {
+                            activity: activity,
+                          });
+                        }}
+                      >
+                        <ListItem.Content>
+                          <ListItem.Title style={styles.listTextStyle}>
+                            Activity {index + 1}
+                          </ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron tvParallaxProperties />
+                      </ListItem>
+                      {getActivityScores(activity.pk).length > 0 && (
+                        <ListItem
+                          key={index.toString()}
+                          bottomDivider
+                          hasTVPreferredFocus={undefined}
+                          tvParallaxProperties={undefined}
+                          containerStyle={[
+                            styles.listStyle,
+                            { borderTopWidth: 0 },
+                            data.activities.length > 1 && { marginBottom: 5 },
+                          ]}
+                          onPress={() => {
+                            // @ts-ignore
+                            navigation.navigate("ExamScore", {
+                              quizzes: getActivityScores(activity.pk),
+                            });
+                          }}
+                        >
+                          <ListItem.Content>
+                            <ListItem.Title style={styles.listTextStyle}>
+                              Score
+                            </ListItem.Title>
+                          </ListItem.Content>
+                          <ListItem.Chevron tvParallaxProperties />
+                        </ListItem>
+                      )}
+                    </React.Fragment>
                   ))}
                 </View>
               )
@@ -137,7 +183,6 @@ const styles = StyleSheet.create({
     backgroundColor: DefaultColor.danger,
     borderWidth: 1,
     borderColor: DefaultColor.white,
-    borderRadius: 10,
   },
   listTextStyle: {
     fontFamily: "poppins-regular",

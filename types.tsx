@@ -13,6 +13,7 @@ import Activity from "./models/Activity";
 import Amun from "./models/Amun";
 import Lecture from "./models/Lecture";
 import Quarter from "./models/Quarter";
+import { QuizScore } from "./models/Score";
 
 declare global {
   namespace ReactNavigation {
@@ -57,6 +58,12 @@ export type ExamParamList = {
   };
   ExamList: {
     quarter: Quarter;
+  };
+  ExamScore: {
+    quizzes: Array<QuizScore>;
+  };
+  OverviewExamScore: {
+    quiz: QuizScore;
   };
 };
 

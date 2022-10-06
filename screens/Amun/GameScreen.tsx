@@ -21,6 +21,10 @@ import { GAME_QUESTIONS } from "../../data/GAME_QUESTIONS";
 import Answer from "../../models/Answer";
 import { Choice, GameQuestion, Question } from "../../models/GameQuestion";
 import { AmunStackParamList } from "../../types";
+import { AppStateStore } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { addGameScore } from "../../redux/actions/scoreAction";
+import { GameScore } from "../../models/Score";
 
 type IType = {
   params: AmunStackParamList["Game"];
@@ -42,6 +46,7 @@ export default function GameScreen() {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+  const dispatch = useDispatch();
 
   const toggleIsDoneModal = () => {
     setIsDone(!isDone);
@@ -59,6 +64,7 @@ export default function GameScreen() {
     answers.map((data: Answer) => {
       total += data.is_correct ? 1 : 0;
     });
+    // add score
     return `${total.toString()}/${answers.length.toString()}`;
   };
 
@@ -83,6 +89,8 @@ export default function GameScreen() {
         !isModalVisible
       ) {
         setLoading(true);
+        dispatch(addGameScore(new GameScore(answers, amun.pk)));
+
         setTimeout(() => {
           setLoading(false);
           toggleIsDoneModal();
