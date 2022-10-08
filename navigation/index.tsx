@@ -38,6 +38,7 @@ import { Switch } from "react-native-elements";
 import AmunNavigator from "./AmunNavigator";
 import LeksyonNavigator from "./LeksyonNavigator";
 import ExamNavigator from "./ExamNavigator";
+import { TranslationScreen } from "../screens/Translation";
 
 export default function Navigation({
   colorScheme,
@@ -141,6 +142,17 @@ function RootNavigator() {
           component={ExamNavigator}
           options={{
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Translation"
+          component={TranslationScreen}
+          options={{
+            headerTransparent: false,
+            title: "Translation",
+            headerTitleAlign: "center",
+            headerStyle: { backgroundColor: DefaultColor.main },
+            headerShadowVisible: false,
           }}
         />
       </Stack.Navigator>

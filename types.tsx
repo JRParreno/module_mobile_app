@@ -29,6 +29,7 @@ export type RootStackParamList = {
   Amun: undefined;
   Leksyon: undefined;
   Exam: undefined;
+  Translation: undefined;
 };
 
 export type AmunStackParamList = {

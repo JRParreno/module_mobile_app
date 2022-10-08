@@ -45,6 +45,16 @@ export default function HomeScreen() {
               backgroundColor: DefaultColor.pink,
             }}
           />
+          <CategoryCard
+            onPress={() => {
+              navigation.navigate("Translation");
+            }}
+            source={require("../../assets/lottie/8852-searching-for-word.json")}
+            title="TRANSLATION"
+            style={{
+              backgroundColor: DefaultColor.dark,
+            }}
+          />
         </View>
       </ScrollView>
     </ViewWithLoading>
