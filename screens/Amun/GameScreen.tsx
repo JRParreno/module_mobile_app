@@ -65,7 +65,10 @@ export default function GameScreen() {
       total += data.is_correct ? 1 : 0;
     });
     // add score
-    return `${total.toString()}/${answers.length.toString()}`;
+    return {
+      score: total,
+      quizLength: answers.length,
+    };
   };
 
   useFocusEffect(
@@ -214,10 +217,13 @@ export default function GameScreen() {
                     : DefaultColor.danger,
                 }}
               >
-                CONGRATULATIONS!
+                {getScore().score === 0 ? "Try again" : "CONGRATULATIONS!"}
               </PoppinTextBold>
               <PoppinQuestiobText>
-                Your score is {getScore()}
+                Your score is{" "}
+                {getScore().score.toString() +
+                  "/" +
+                  getScore().quizLength.toString()}
               </PoppinQuestiobText>
             </View>
             <Pressable

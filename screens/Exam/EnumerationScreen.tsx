@@ -143,6 +143,7 @@ export default function EnumerationScreen() {
       }
     });
     return {
+      score: total,
       total: `${total.toString()}/${answers.length.toString()}`,
       totalReview: totalReview,
     };
@@ -315,7 +316,7 @@ export default function EnumerationScreen() {
                   color: DefaultColor.main,
                 }}
               >
-                CONGRATULATIONS!
+                {getScore().score === 0 ? "Try again" : "CONGRATULATIONS!"}
               </PoppinTextBold>
               <PoppinQuestiobText>
                 Your score is {getScore().total}
