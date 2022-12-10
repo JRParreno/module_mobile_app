@@ -2,10 +2,12 @@ import { useFocusEffect } from "@react-navigation/native";
 import * as React from "react";
 import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { Image } from "react-native-elements";
 import { TextInput } from "react-native-paper";
 import { DefaultColor } from "../../constants/Colors";
 import Enumeration from "../../models/Enumeration";
 import { PoppinText } from "../StyledText";
+// import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
 
 interface IProps {
   data: Enumeration;
@@ -19,7 +21,7 @@ export default function EnumerationCard(props: IProps) {
   const [text, setText] = useState("");
 
   const { data, index, setAnswer, setEnum } = props;
-  const { activity_pk, answer, pk, question } = data;
+  const { activity_pk, answer, pk, question, direction, question_image, question_video } = data;
 
   useFocusEffect(
     useCallback(() => {
@@ -29,9 +31,36 @@ export default function EnumerationCard(props: IProps) {
   );
   return (
     <View style={styles.container}>
+      {direction &&
+        <PoppinText>
+          {direction}
+        </PoppinText>
+      }
       <PoppinText>
-        {index + 1}. {question}
+        {index + 1}. {question ? question : "Question"}
       </PoppinText>
+
+      {
+        question_image &&
+        <Image
+          source={{ uri: question_image }}
+          height={"100%"}
+          width={"100%"}
+        />
+      }
+
+      {/* {
+        question_video &&
+        <Video
+          style={styles.video}
+          source={{
+            uri: question_video,
+          }}
+          useNativeControls
+          isLooping
+        />
+      } */}
+
       <View style={styles.inputContainer}>
         <TextInput
           label="Sagot"
@@ -61,4 +90,7 @@ const styles = StyleSheet.create({
     flex: 0,
     marginTop: 20,
   },
+  video: {
+    flex: 1,
+  }
 });
