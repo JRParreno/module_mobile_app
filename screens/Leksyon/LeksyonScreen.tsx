@@ -60,8 +60,8 @@ export default function LeksyonScreen() {
                 Platform.OS === "ios"
                   ? lecture.lesson
                   : {
-                      uri: `bundle-assets://${lecture.path}`,
-                    }
+                    uri: `bundle-assets://${lecture.path}`,
+                  }
               }
               onLoadComplete={(numberOfPages, filePath) => {
                 console.log(`Number of pages: ${numberOfPages}`);
