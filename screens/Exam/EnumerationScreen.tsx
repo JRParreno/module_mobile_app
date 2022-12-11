@@ -30,7 +30,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Enumeration, { EnumAnswer } from "../../models/Enumeration";
 import { EnumerationCard } from "../../components/Enumeration";
 import { ButtonComponent } from "../../components/Button/StyledButton";
-import Pdf from "react-native-pdf";
 import { useDispatch, useSelector } from "react-redux";
 import { addQuizScore } from "../../redux/actions/scoreAction";
 import { QuizScore } from "../../models/Score";
@@ -257,29 +256,7 @@ export default function EnumerationScreen() {
           backdropTransitionOutTiming={600}
         >
           <View style={styles.modalContainer}>
-            <Pdf
-              trustAllCerts={false}
-              source={
-                Platform.OS === "ios"
-                  ? activity.story
-                  : {
-                    uri: `bundle-assets://${activity.path}`,
-                  }
-              }
-              onLoadComplete={(numberOfPages, filePath) => {
-                console.log(`Number of pages: ${numberOfPages}`);
-              }}
-              onPageChanged={(page, numberOfPages) => {
-                console.log(`Current page: ${page}`);
-              }}
-              onError={(error) => {
-                console.log(error);
-              }}
-              onPressLink={(uri) => {
-                console.log(`Link pressed: ${uri}`);
-              }}
-              style={styles.pdf}
-            />
+
 
             <Pressable onPress={toggleModal} style={styles.closeContainer}>
               <PoppinText

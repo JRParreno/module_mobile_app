@@ -68,7 +68,7 @@ export default function LeksyonScreen() {
             <Video
               ref={videoRef}
               style={styles.video}
-              source={require('../../assets/video/lessons/Q1Lesson1.mp4')}
+              source={lecture.video}
               useNativeControls
               resizeMode={ResizeMode.CONTAIN}
               isLooping
