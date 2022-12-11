@@ -24,7 +24,6 @@ import {
   PoppinTextBold,
 } from "../../components/StyledText";
 import { DefaultColor } from "../../constants/Colors";
-import ACTIVITY from "../../data/ACTIVITY";
 import ENUMERATION from "../../data/ENUMERATION";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
@@ -264,8 +263,8 @@ export default function EnumerationScreen() {
                 Platform.OS === "ios"
                   ? activity.story
                   : {
-                      uri: `bundle-assets://${activity.path}`,
-                    }
+                    uri: `bundle-assets://${activity.path}`,
+                  }
               }
               onLoadComplete={(numberOfPages, filePath) => {
                 console.log(`Number of pages: ${numberOfPages}`);

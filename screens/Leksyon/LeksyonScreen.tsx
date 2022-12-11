@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
   Platform,
@@ -22,6 +22,7 @@ import { PoppinText } from "../../components/StyledText";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 import { DefaultColor } from "../../constants/Colors";
 import Pdf from "react-native-pdf";
+import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
 
 type IType = {
   params: LeksyonParamList["LeksyonView"];
@@ -31,6 +32,8 @@ export default function LeksyonScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
   const [lecture, setLecture] = useState<Lecture | null>(null);
+  const [status, setStatus] = useState<AVPlaybackStatus | null>();
+  const videoRef = React.useRef<Video>(null);
 
   const route = useRoute<RouteProp<IType, "params">>();
   const lectureRoute = route.params.lecture;
@@ -49,33 +52,33 @@ export default function LeksyonScreen() {
     }, [useIsFocused()])
   );
 
+  useEffect(() => {
+    return () => {
+      console.log('unmount video')
+      videoRef.current?.unloadAsync();
+      console.log('video unmounted')
+    }
+  }, [videoRef])
+
   return (
     <ViewWithLoading loading={loading}>
       <View style={styles.container}>
         {!loading && lecture && (
           <React.Fragment>
-            <Pdf
-              trustAllCerts={false}
-              source={
-                Platform.OS === "ios"
-                  ? lecture.lesson
-                  : {
-                    uri: `bundle-assets://${lecture.path}`,
-                  }
-              }
-              onLoadComplete={(numberOfPages, filePath) => {
-                console.log(`Number of pages: ${numberOfPages}`);
+            <Video
+              ref={videoRef}
+              style={styles.video}
+              source={require('../../assets/video/lessons/Q1Lesson1.mp4')}
+              useNativeControls
+              resizeMode={ResizeMode.CONTAIN}
+              isLooping
+              onPlaybackStatusUpdate={status => setStatus(() => status)}
+              isMuted={false}
+              shouldPlay={true}
+              onError={(e) => {
+                console.log(e);
               }}
-              onPageChanged={(page, numberOfPages) => {
-                console.log(`Current page: ${page}`);
-              }}
-              onError={(error) => {
-                console.log(error);
-              }}
-              onPressLink={(uri) => {
-                console.log(`Link pressed: ${uri}`);
-              }}
-              style={styles.pdf}
+
             />
             <View style={{ marginHorizontal: 10 }}>
               <ButtonComponent
@@ -112,9 +115,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  pdf: {
+  video: {
     flex: 1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+    borderWidth: 1,
   },
 });
