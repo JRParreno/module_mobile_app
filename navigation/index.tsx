@@ -64,19 +64,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const [skipped, setSkipped] = useState(true);
   const [isInitialized, setInitialized] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [soundChecked, setSoundChecked] = useState(false);
-  const [musicChecked, setMusicChecked] = useState(false);
 
-  const toggleMusicSwitch = () => {
-    setMusicChecked(!musicChecked);
-  };
-  const toggleSoundSwitch = () => {
-    setSoundChecked(!soundChecked);
-  };
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   const checkSkipped = async () => {
     const skipLanding = await getData("skipLanding");
@@ -97,16 +85,6 @@ function RootNavigator() {
       <Stack.Navigator
         screenOptions={{
           headerBackVisible: true,
-          headerRight: () => (
-            <Pressable
-              onPress={async () => {
-                // await AsyncStorage.multiRemove(["skipLanding"]);
-                toggleModal();
-              }}
-            >
-              <Ionicons name="settings" size={26} />
-            </Pressable>
-          ),
           headerBackTitleVisible: false,
           title: "",
           headerTransparent: true,
@@ -156,47 +134,6 @@ function RootNavigator() {
           }}
         />
       </Stack.Navigator>
-      <Modal
-        testID={"modal"}
-        isVisible={isModalVisible}
-        backdropColor="#B4B3DB"
-        backdropOpacity={0.8}
-        animationIn="zoomInDown"
-        animationOut="zoomOutUp"
-        animationInTiming={600}
-        animationOutTiming={600}
-        backdropTransitionInTiming={600}
-        backdropTransitionOutTiming={600}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.listContainer}>
-            <PoppinText>Sounds</PoppinText>
-            <Switch
-              value={soundChecked}
-              onValueChange={(value) => setSoundChecked(value)}
-            />
-          </View>
-          <View style={styles.listContainer}>
-            <PoppinText>Music</PoppinText>
-            <Switch
-              value={musicChecked}
-              onValueChange={(value) => setMusicChecked(value)}
-            />
-          </View>
-
-          <Pressable onPress={toggleModal} style={styles.closeContainer}>
-            <PoppinText
-              style={{
-                fontFamily: "poppins-regular",
-                fontSize: 14,
-                color: DefaultColor.white,
-              }}
-            >
-              close
-            </PoppinText>
-          </Pressable>
-        </View>
-      </Modal>
     </View>
   ) : (
     <Loader />
