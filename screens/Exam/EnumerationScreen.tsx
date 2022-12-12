@@ -60,7 +60,6 @@ export default function EnumerationScreen() {
   const [isSubmitModal, setIsSubmitModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const dispatch = useDispatch();
-  console.log(activity);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -85,6 +84,7 @@ export default function EnumerationScreen() {
       }
       setEnumerations(filterEnumeration);
     }
+    setEnumerations(filterEnumeration);
     setLoading(false);
   };
 
@@ -297,6 +297,7 @@ export default function EnumerationScreen() {
                     source={activity.image}
                     height={"100%"}
                     width={"100%"}
+                    resizeMode={"contain"}
                   />
                 </TouchableOpacity>
               </View>
@@ -409,6 +410,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DefaultColor.white,
     overflow: "hidden",
+    padding: 10
   },
   closeContainer: {
     flex: 0,
@@ -434,8 +436,9 @@ const styles = StyleSheet.create({
   },
   video: {
     flex: 1,
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    borderWidth: 1,
+    borderColor: DefaultColor.main,
+    borderRadius: 5
   },
   imageContainer: {
     flex: 1,
@@ -443,6 +446,9 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: 10,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: DefaultColor.main,
+    borderRadius: 5
   },
 });

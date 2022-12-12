@@ -55,14 +55,15 @@ export default function EnumerationCard(props: IProps) {
 
       {
         question_video != undefined &&
-        <Video
-          style={styles.video}
-          source={{
-            uri: question_video,
-          }}
-          controls
-          resizeMode="contain"
-        />
+        <View style={styles.video}>
+          <Video
+            style={styles.video}
+            source={question_video}
+            controls
+            resizeMode="contain"
+            fullscreen={true}
+          />
+        </View>
       }
 
       <View style={styles.inputContainer}>
@@ -96,6 +97,8 @@ const styles = StyleSheet.create({
   },
   video: {
     flex: 1,
+    height: 200,
+    borderWidth: 1,
   },
   imageContainer: {
     flex: 0,

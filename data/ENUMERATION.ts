@@ -566,8 +566,21 @@ export default function ENUMERATION() {
             "quarter_pk": "2098067388",
             "activity_pk": "3254639281",
             "question": " Bilang usad na akus pawno mo piga ataman kan sainyong mga ayupan?",
-            "question_video": require('../assets/video/Story/Q3L2Gigibon2.mp4'),
             "answer": "",
+        },
+        {
+            "pk": "1302367391",
+            "quarter_pk": "2098067388",
+            "activity_pk": "3254639281",
+            "question": "Pag nabasa mo na kadi pakitype : amo na po",
+            "answer": "amo na po",
+        },
+        {
+            "pk": "1755478899",
+            "quarter_pk": "2098067388",
+            "activity_pk": "7252893598",
+            "question": "Pag nabasa mo na kadi pakitype : amo na po",
+            "answer": "amo na po",
         },
         {
             "pk": "1755478899",
@@ -789,38 +802,39 @@ export default function ENUMERATION() {
         {
             "pk": "0132006721",
             "quarter_pk": "5344627922",
-            "activity_pk": "8053987158",
+            "activity_pk": "5344627922",
             "question": "Alas ",
             "answer": "",
         },
         {
             "pk": "1080249817",
             "quarter_pk": "5344627922",
-            "activity_pk": "8053987158",
+            "activity_pk": "5344627922",
             "question": "Pagkawn ",
             "answer": "masiram",
         },
         {
             "pk": "8761318851",
             "quarter_pk": "5344627922",
-            "activity_pk": "8053987158",
+            "activity_pk": "5344627922",
             "question": "Damulag ",
             "answer": "makusog",
         },
         {
             "pk": "0433211866",
             "quarter_pk": "5344627922",
-            "activity_pk": "8053987158",
+            "activity_pk": "5344627922",
             "question": "Orig ",
             "answer": "mataba",
         },
         {
             "pk": "5440441681",
             "quarter_pk": "5344627922",
-            "activity_pk": "8053987158",
+            "activity_pk": "5344627922",
             "question": "Suka ",
             "answer": "maalsum",
         },
+        // START EXCEPTED
         {
             "pk": "8710516359",
             "quarter_pk": "5344627922",
@@ -856,6 +870,7 @@ export default function ENUMERATION() {
             "question": "Lola ",
             "answer": "matanda",
         },
+        // END EXCEPTED
         {
             "pk": "9152822768",
             "quarter_pk": "5344627922",
