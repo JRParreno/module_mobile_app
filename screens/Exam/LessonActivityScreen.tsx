@@ -44,7 +44,7 @@ export default function LectureActivityScreen() {
     let tempData: Array<{ lecture: Lecture; activities: Array<Activity> }> = [];
     lecturesData.map((data: Lecture) => {
       const acitvitiesData = ACTIVITY().filter(
-        (activity: Activity) => activity.leksyon_pk === data.lesson
+        (activity: Activity) => activity.leksyon_pk === data.pk
       );
       if (acitvitiesData.length > 0) {
         tempData.push({ activities: acitvitiesData, lecture: data });
@@ -90,7 +90,7 @@ export default function LectureActivityScreen() {
               ) => (
                 <View
                   key={index.toString()}
-                  style={[styles.listStyle, { padding: 10, borderRadius: 10 }]}
+                  style={[styles.listStyle, { padding: 10, borderRadius: 10, marginBottom: 10 }]}
                 >
                   <PoppinText
                     style={{ color: DefaultColor.white, marginBottom: 10 }}
