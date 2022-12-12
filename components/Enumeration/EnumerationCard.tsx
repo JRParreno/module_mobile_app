@@ -6,7 +6,7 @@ import { TextInput } from "react-native-paper";
 import { DefaultColor } from "../../constants/Colors";
 import Enumeration from "../../models/Enumeration";
 import { PoppinText } from "../StyledText";
-import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
+import Video from 'react-native-video';
 
 interface IProps {
   data: Enumeration;
@@ -47,6 +47,8 @@ export default function EnumerationCard(props: IProps) {
             source={question_image}
             height={"100%"}
             width={"100%"}
+            resizeMode={"contain"}
+            style={{ borderWidth: 1, flex: 1 }}
           />
         </View>
       }
@@ -58,8 +60,8 @@ export default function EnumerationCard(props: IProps) {
           source={{
             uri: question_video,
           }}
-          useNativeControls
-          isLooping
+          controls
+          resizeMode="contain"
         />
       }
 
@@ -98,6 +100,8 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 0,
     height: 200,
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 2,
     borderColor: DefaultColor.pink,
     borderRadius: 10,

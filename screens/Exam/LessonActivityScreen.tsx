@@ -1,7 +1,6 @@
 import {
   RouteProp,
   useFocusEffect,
-  useIsFocused,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
@@ -10,7 +9,6 @@ import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { ListItem } from "react-native-elements";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import LEKSYON from "../../data/LEKSYON";
 import Lecture from "../../models/Lecture";
 import { ExamParamList, LeksyonParamList } from "../../types";
 import Lottie from "lottie-react-native";
@@ -21,6 +19,7 @@ import { PoppinText } from "../../components/StyledText";
 import { useSelector } from "react-redux";
 import { AppStateStore } from "../../redux/store";
 import { QuizScore } from "../../models/Score";
+import LECTURE from "../../data/LECTURE";
 
 type IType = {
   params: ExamParamList["ExamList"];
@@ -35,18 +34,17 @@ export default function LectureActivityScreen() {
     }>
   >([]);
   const appState = useSelector((state: AppStateStore) => state.score);
-
   const route = useRoute<RouteProp<IType, "params">>();
   const quarter = route.params.quarter;
   const navigation = useNavigation();
   const handleGetLectures = () => {
-    const lecturesData = LEKSYON().filter(
+    const lecturesData = LECTURE().filter(
       (data: Lecture) => data.quarter_pk === quarter.pk
     );
     let tempData: Array<{ lecture: Lecture; activities: Array<Activity> }> = [];
     lecturesData.map((data: Lecture) => {
       const acitvitiesData = ACTIVITY().filter(
-        (activity: Activity) => activity.leksyon_pk === data.pk
+        (activity: Activity) => activity.leksyon_pk === data.lesson
       );
       if (acitvitiesData.length > 0) {
         tempData.push({ activities: acitvitiesData, lecture: data });

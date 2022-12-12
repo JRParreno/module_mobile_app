@@ -19,7 +19,7 @@ import Lecture from "../../models/Lecture";
 import { PoppinText } from "../../components/StyledText";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 import { DefaultColor } from "../../constants/Colors";
-import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
+import Video from 'react-native-video';
 
 type IType = {
   params: LeksyonParamList["LeksyonView"];
@@ -29,8 +29,6 @@ export default function LeksyonScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
   const [lecture, setLecture] = useState<Lecture | null>(null);
-  const [status, setStatus] = useState<AVPlaybackStatus | null>();
-  const videoRef = React.useRef<Video>(null);
 
   const route = useRoute<RouteProp<IType, "params">>();
   const lectureRoute = route.params.lecture;
@@ -49,13 +47,6 @@ export default function LeksyonScreen() {
     }, [useIsFocused()])
   );
 
-  useEffect(() => {
-    return () => {
-      // console.log('unmount video')
-      videoRef.current?.unloadAsync();
-      // console.log('video unmounted')
-    }
-  }, [videoRef])
 
   return (
     <ViewWithLoading loading={loading}>
@@ -63,15 +54,10 @@ export default function LeksyonScreen() {
         {!loading && lecture && (
           <React.Fragment>
             <Video
-              ref={videoRef}
               style={styles.video}
               source={lecture.video}
-              useNativeControls
-              resizeMode={ResizeMode.CONTAIN}
-              isLooping
-              onPlaybackStatusUpdate={status => setStatus(() => status)}
-              isMuted={false}
-              shouldPlay={true}
+              controls
+              resizeMode="contain"
               onError={(e) => {
                 console.log(e);
               }}

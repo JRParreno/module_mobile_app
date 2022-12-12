@@ -32,7 +32,8 @@ import { ButtonComponent } from "../../components/Button/StyledButton";
 import { useDispatch, useSelector } from "react-redux";
 import { addQuizScore } from "../../redux/actions/scoreAction";
 import { QuizScore } from "../../models/Score";
-import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
+import Video from 'react-native-video';
+import ModalViewLocalImage from "../../components/Modal/ModalViewLocalImage";
 
 type IType = {
   params: ExamParamList["ExamView"];
@@ -43,12 +44,11 @@ export default function EnumerationScreen() {
   const activity = route.params.activity;
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
-  const [status, setStatus] = useState<AVPlaybackStatus | null>();
-  const videoRef = React.useRef<Video>(null);
 
   const [isModalVisible, setModalVisible] = useState(
     activity.story ? true : false
   );
+  const [visibleImage, setVisibleImage] = useState(false);
   const [answers, setAnswers] = useState<Array<EnumAnswer>>([]);
 
   const [enumerations, setEnumerations] = useState<Array<Enumeration> | null>(
@@ -60,7 +60,7 @@ export default function EnumerationScreen() {
   const [isSubmitModal, setIsSubmitModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const dispatch = useDispatch();
-
+  console.log(activity);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -68,14 +68,6 @@ export default function EnumerationScreen() {
   const toggleSubmitModal = () => {
     setIsSubmitModal(!isSubmitModal);
   };
-
-  useEffect(() => {
-    return () => {
-      // console.log('unmount video');
-      videoRef.current?.unloadAsync();
-      // console.log('video unmounted');
-    }
-  }, [videoRef])
 
   const handleGetLesson = () => {
     setLoading(true);
@@ -85,6 +77,12 @@ export default function EnumerationScreen() {
       (data: Enumeration) => data.activity_pk === activity.pk
     );
     if (filterEnumeration.length > 0) {
+      for (var i = filterEnumeration.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = filterEnumeration[i];
+        filterEnumeration[i] = filterEnumeration[j];
+        filterEnumeration[j] = temp;
+      }
       setEnumerations(filterEnumeration);
     }
     setLoading(false);
@@ -276,15 +274,10 @@ export default function EnumerationScreen() {
             {
               activity.video &&
               <Video
-                ref={videoRef}
                 style={styles.video}
                 source={activity.video}
-                useNativeControls
-                resizeMode={ResizeMode.CONTAIN}
-                isLooping
-                onPlaybackStatusUpdate={status => setStatus(() => status)}
-                isMuted={false}
-                shouldPlay={true}
+                controls
+                resizeMode="contain"
                 onError={(e) => {
                   console.log(e);
                 }}
@@ -294,13 +287,21 @@ export default function EnumerationScreen() {
             {
               activity.image &&
               <View style={styles.imageContainer}>
-                <Image
-                  source={activity.image}
-                  height={"100%"}
-                  width={"100%"}
-                />
+                <TouchableOpacity
+                  onPress={() => {
+                    setVisibleImage(true);
+                    setModalVisible(false);
+                  }}
+                >
+                  <Image
+                    source={activity.image}
+                    height={"100%"}
+                    width={"100%"}
+                  />
+                </TouchableOpacity>
               </View>
             }
+
             <Pressable onPress={toggleModal} style={styles.closeContainer}>
               <PoppinText
                 style={{
@@ -366,6 +367,16 @@ export default function EnumerationScreen() {
           </View>
         </Modal>
       )}
+      <ModalViewLocalImage
+        title="Image"
+        uri={require('../../assets/images/APP_IMAGES/Q1L1Gigibun1/facemask.jpg')}
+        visible={visibleImage}
+        onClose={() => {
+          setVisibleImage(false);
+          setModalVisible(true);
+        }}
+      />
+
     </ViewWithLoading>
   );
 }
@@ -425,16 +436,13 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    borderWidth: 1
   },
   imageContainer: {
-    flex: 0,
-    height: 200,
-    borderWidth: 2,
-    borderColor: DefaultColor.pink,
-    borderRadius: 10,
+    flex: 1,
     overflow: "hidden",
     padding: 5,
     marginVertical: 10,
+    justifyContent: "center",
+    alignItems: "center"
   },
 });
