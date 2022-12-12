@@ -29,7 +29,6 @@ export default function EnumerationCard(props: IProps) {
     }, [data])
   );
 
-  console.log(data);
   return (
     <View style={styles.container}>
       {direction &&

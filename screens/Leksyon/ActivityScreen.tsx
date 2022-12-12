@@ -27,7 +27,7 @@ export default function ActivitiesScreen() {
   const navigation = useNavigation();
   const handleGetActivities = () => {
     const lecturesData = ACTIVITY().filter(
-      (data: Activity) => data.lesson_pk === lecture.pk
+      (data: Activity) => data.leksyon_pk === lecture.pk
     );
     setActivities(lecturesData);
     setLoading(false);
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DefaultColor.white,
     borderRadius: 10,
+    marginBottom: 5
   },
   listTextStyle: {
     fontFamily: "poppins-regular",

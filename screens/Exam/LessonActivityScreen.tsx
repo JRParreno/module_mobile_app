@@ -46,7 +46,7 @@ export default function LectureActivityScreen() {
     let tempData: Array<{ lecture: Lecture; activities: Array<Activity> }> = [];
     lecturesData.map((data: Lecture) => {
       const acitvitiesData = ACTIVITY().filter(
-        (activity: Activity) => activity.lesson_pk === data.pk
+        (activity: Activity) => activity.leksyon_pk === data.pk
       );
       if (acitvitiesData.length > 0) {
         tempData.push({ activities: acitvitiesData, lecture: data });

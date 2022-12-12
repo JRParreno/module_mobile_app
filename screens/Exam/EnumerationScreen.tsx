@@ -1,17 +1,16 @@
 import * as React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Image,
   View,
 } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import { WebView } from "react-native-webview";
-import { ExamParamList, LeksyonParamList } from "../../types";
+import { ExamParamList } from "../../types";
 import {
   RouteProp,
   useFocusEffect,
@@ -33,6 +32,7 @@ import { ButtonComponent } from "../../components/Button/StyledButton";
 import { useDispatch, useSelector } from "react-redux";
 import { addQuizScore } from "../../redux/actions/scoreAction";
 import { QuizScore } from "../../models/Score";
+import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
 
 type IType = {
   params: ExamParamList["ExamView"];
@@ -43,6 +43,9 @@ export default function EnumerationScreen() {
   const activity = route.params.activity;
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
+  const [status, setStatus] = useState<AVPlaybackStatus | null>();
+  const videoRef = React.useRef<Video>(null);
+
   const [isModalVisible, setModalVisible] = useState(
     activity.story ? true : false
   );
@@ -65,6 +68,14 @@ export default function EnumerationScreen() {
   const toggleSubmitModal = () => {
     setIsSubmitModal(!isSubmitModal);
   };
+
+  useEffect(() => {
+    return () => {
+      // console.log('unmount video');
+      videoRef.current?.unloadAsync();
+      // console.log('video unmounted');
+    }
+  }, [videoRef])
 
   const handleGetLesson = () => {
     setLoading(true);
@@ -147,12 +158,16 @@ export default function EnumerationScreen() {
     };
   };
 
+  const boolShowActivity = () => {
+    return activity.video !== undefined || activity.image !== undefined;
+  }
+
   return (
     <ViewWithLoading loading={loading}>
       <View style={styles.container}>
         {enumerations && currentIndex !== enumerations.length ? (
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            {activity && activity.story && (
+            {activity && boolShowActivity() && (
               <View style={styles.storyContainer}>
                 <TouchableOpacity
                   onPress={() => {
@@ -166,6 +181,8 @@ export default function EnumerationScreen() {
                 </TouchableOpacity>
               </View>
             )}
+            <PoppinText style={{ fontFamily: "poppins-semibold", marginBottom: 10 }}>{activity.direction}</PoppinText>
+
             {enumerations &&
               currentIndex !== enumerations.length &&
               enumerations.length > 0 && (
@@ -256,8 +273,34 @@ export default function EnumerationScreen() {
           backdropTransitionOutTiming={600}
         >
           <View style={styles.modalContainer}>
+            {
+              activity.video &&
+              <Video
+                ref={videoRef}
+                style={styles.video}
+                source={activity.video}
+                useNativeControls
+                resizeMode={ResizeMode.CONTAIN}
+                isLooping
+                onPlaybackStatusUpdate={status => setStatus(() => status)}
+                isMuted={false}
+                shouldPlay={true}
+                onError={(e) => {
+                  console.log(e);
+                }}
+              />
+            }
 
-
+            {
+              activity.image &&
+              <View style={styles.imageContainer}>
+                <Image
+                  source={activity.image}
+                  height={"100%"}
+                  width={"100%"}
+                />
+              </View>
+            }
             <Pressable onPress={toggleModal} style={styles.closeContainer}>
               <PoppinText
                 style={{
@@ -378,9 +421,20 @@ const styles = StyleSheet.create({
     borderColor: DefaultColor.white,
     borderRadius: 20,
   },
-  pdf: {
+  video: {
     flex: 1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+    borderWidth: 1
+  },
+  imageContainer: {
+    flex: 0,
+    height: 200,
+    borderWidth: 2,
+    borderColor: DefaultColor.pink,
+    borderRadius: 10,
+    overflow: "hidden",
+    padding: 5,
+    marginVertical: 10,
   },
 });

@@ -2,13 +2,11 @@ import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
-  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import { WebView } from "react-native-webview";
 import { LeksyonParamList } from "../../types";
 import {
   RouteProp,
@@ -21,7 +19,6 @@ import Lecture from "../../models/Lecture";
 import { PoppinText } from "../../components/StyledText";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 import { DefaultColor } from "../../constants/Colors";
-import Pdf from "react-native-pdf";
 import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
 
 type IType = {
@@ -54,9 +51,9 @@ export default function LeksyonScreen() {
 
   useEffect(() => {
     return () => {
-      console.log('unmount video')
+      // console.log('unmount video')
       videoRef.current?.unloadAsync();
-      console.log('video unmounted')
+      // console.log('video unmounted')
     }
   }, [videoRef])
 
@@ -78,7 +75,6 @@ export default function LeksyonScreen() {
               onError={(e) => {
                 console.log(e);
               }}
-
             />
             <View style={{ marginHorizontal: 10 }}>
               <ButtonComponent
@@ -119,6 +115,5 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    borderWidth: 1,
   },
 });
