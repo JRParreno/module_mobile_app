@@ -67,6 +67,7 @@ export default function EnumerationScreen() {
   const toggleSubmitModal = () => {
     setIsSubmitModal(!isSubmitModal);
   };
+  console.log(activity);
 
   const handleGetLesson = () => {
     setLoading(true);
@@ -84,7 +85,6 @@ export default function EnumerationScreen() {
       }
       setEnumerations(filterEnumeration);
     }
-    setEnumerations(filterEnumeration);
     setLoading(false);
   };
 
@@ -129,10 +129,14 @@ export default function EnumerationScreen() {
         activity.pk,
         enumeration.pk,
         answer ? answer : "",
-        enumeration.answer.length > 0
-          ? enumeration.answer === answer
+        enumeration.answer.length > 0 && answer != null
+          ? enumeration.answer.toLowerCase() === answer.toLowerCase()
           : undefined
       );
+      console.log(enumeration.answer.toLowerCase());
+      console.log(answer!.toLowerCase());
+      console.log(enumeration.answer.toLowerCase() === answer!.toLowerCase());
+
       setAnswers(answers.concat([myAnswer]));
       toggleSubmitModal();
       return;
@@ -156,7 +160,6 @@ export default function EnumerationScreen() {
     };
   };
 
-  console.log(activity);
 
   const boolShowActivity = () => {
     return activity.video !== undefined || activity.image !== undefined;
@@ -226,14 +229,14 @@ export default function EnumerationScreen() {
               <PoppinTextBold
                 style={{
                   color: answer
-                    ? enumeration.answer === answer
+                    ? enumeration.answer.toLowerCase() === answer.toLowerCase()
                       ? DefaultColor.main
                       : DefaultColor.danger
                     : DefaultColor.danger,
                 }}
               >
-                {enumeration.answer.length > 0
-                  ? enumeration.answer === answer
+                {enumeration.answer.length > 0 && answer != null
+                  ? enumeration.answer.toLowerCase() === answer.toLowerCase()
                     ? "CORRECT ANSWER!"
                     : "WRONG ANSWER!"
                   : "This question will be check by your teacher"}
