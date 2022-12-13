@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
   },
   lottieContainer: {
     flex: 1,
+    height: 200,
     marginVertical: 30,
     backgroundColor: DefaultColor.danger,
     padding: 20,

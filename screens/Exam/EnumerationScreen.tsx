@@ -156,6 +156,8 @@ export default function EnumerationScreen() {
     };
   };
 
+  console.log(activity);
+
   const boolShowActivity = () => {
     return activity.video !== undefined || activity.image !== undefined;
   }
@@ -368,15 +370,19 @@ export default function EnumerationScreen() {
           </View>
         </Modal>
       )}
-      <ModalViewLocalImage
-        title="Image"
-        uri={require('../../assets/images/APP_IMAGES/Q1L1Gigibun1/facemask.jpg')}
-        visible={visibleImage}
-        onClose={() => {
-          setVisibleImage(false);
-          setModalVisible(true);
-        }}
-      />
+      {
+        activity.image &&
+
+        <ModalViewLocalImage
+          title="Image"
+          uri={activity.image}
+          visible={visibleImage}
+          onClose={() => {
+            setVisibleImage(false);
+            setModalVisible(true);
+          }}
+        />
+      }
 
     </ViewWithLoading>
   );

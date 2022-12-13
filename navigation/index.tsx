@@ -39,6 +39,7 @@ import AmunNavigator from "./AmunNavigator";
 import LeksyonNavigator from "./LeksyonNavigator";
 import ExamNavigator from "./ExamNavigator";
 import { TranslationScreen } from "../screens/Translation";
+import { Audio } from "expo-av";
 
 export default function Navigation({
   colorScheme,
@@ -71,6 +72,7 @@ function RootNavigator() {
     setSkipped(skipLanding !== undefined && skipLanding !== "");
     setInitialized(true);
   };
+
 
   useFocusEffect(
     useCallback(() => {

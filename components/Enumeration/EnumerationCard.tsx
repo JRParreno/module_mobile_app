@@ -1,12 +1,13 @@
 import { useFocusEffect } from "@react-navigation/native";
 import * as React from "react";
 import { useCallback, useState } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-paper";
 import { DefaultColor } from "../../constants/Colors";
 import Enumeration from "../../models/Enumeration";
 import { PoppinText } from "../StyledText";
 import Video from 'react-native-video';
+import ModalViewLocalImage from "../Modal/ModalViewLocalImage";
 
 interface IProps {
   data: Enumeration;
@@ -18,6 +19,7 @@ interface IProps {
 export default function EnumerationCard(props: IProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [text, setText] = useState("");
+  const [visibleImage, setVisibleImage] = useState(false);
 
   const { data, index, setAnswer, setEnum } = props;
   const { activity_pk, answer, pk, question, direction, question_image, question_video } = data;
@@ -42,15 +44,21 @@ export default function EnumerationCard(props: IProps) {
 
       {
         question_image != undefined &&
-        <View style={styles.imageContainer}>
-          <Image
-            source={question_image}
-            height={"100%"}
-            width={"100%"}
-            resizeMode={"contain"}
-            style={{ borderWidth: 1, flex: 1 }}
-          />
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setVisibleImage(true);
+          }}
+        >
+          <View style={styles.imageContainer}>
+            <Image
+              source={question_image}
+              height={"100%"}
+              width={"100%"}
+              resizeMode={"contain"}
+              style={{ borderWidth: 1, flex: 1, height: "100%", width: "100%" }}
+            />
+          </View>
+        </TouchableOpacity>
       }
 
       {
@@ -76,6 +84,18 @@ export default function EnumerationCard(props: IProps) {
           }}
           mode={"outlined"}
         />
+        {
+          question_image &&
+          <ModalViewLocalImage
+            title="Image"
+            uri={question_image}
+            visible={visibleImage}
+            onClose={() => {
+              setVisibleImage(false);
+            }}
+          />
+        }
+
       </View>
     </View>
   );
@@ -101,10 +121,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   imageContainer: {
-    flex: 0,
+    flex: 1,
     height: 200,
-    justifyContent: "center",
-    alignItems: "center",
     borderWidth: 2,
     borderColor: DefaultColor.pink,
     borderRadius: 10,
