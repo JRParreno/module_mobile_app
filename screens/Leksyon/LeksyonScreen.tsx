@@ -1,14 +1,12 @@
 import * as React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
-  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import { WebView } from "react-native-webview";
 import { LeksyonParamList } from "../../types";
 import {
   RouteProp,
@@ -21,7 +19,7 @@ import Lecture from "../../models/Lecture";
 import { PoppinText } from "../../components/StyledText";
 import { ButtonComponent } from "../../components/Button/StyledButton";
 import { DefaultColor } from "../../constants/Colors";
-import Pdf from "react-native-pdf";
+import Video from 'react-native-video';
 
 type IType = {
   params: LeksyonParamList["LeksyonView"];
@@ -49,33 +47,20 @@ export default function LeksyonScreen() {
     }, [useIsFocused()])
   );
 
+
   return (
     <ViewWithLoading loading={loading}>
       <View style={styles.container}>
         {!loading && lecture && (
           <React.Fragment>
-            <Pdf
-              trustAllCerts={false}
-              source={
-                Platform.OS === "ios"
-                  ? lecture.lesson
-                  : {
-                    uri: `bundle-assets://${lecture.path}`,
-                  }
-              }
-              onLoadComplete={(numberOfPages, filePath) => {
-                console.log(`Number of pages: ${numberOfPages}`);
+            <Video
+              style={styles.video}
+              source={lecture.video}
+              controls
+              resizeMode="contain"
+              onError={(e) => {
+                console.log(e);
               }}
-              onPageChanged={(page, numberOfPages) => {
-                console.log(`Current page: ${page}`);
-              }}
-              onError={(error) => {
-                console.log(error);
-              }}
-              onPressLink={(uri) => {
-                console.log(`Link pressed: ${uri}`);
-              }}
-              style={styles.pdf}
             />
             <View style={{ marginHorizontal: 10 }}>
               <ButtonComponent
@@ -112,7 +97,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  pdf: {
+  video: {
     flex: 1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,

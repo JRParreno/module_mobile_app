@@ -1,17 +1,16 @@
 import * as React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Image,
   View,
 } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import { WebView } from "react-native-webview";
-import { ExamParamList, LeksyonParamList } from "../../types";
+import { ExamParamList } from "../../types";
 import {
   RouteProp,
   useFocusEffect,
@@ -24,17 +23,17 @@ import {
   PoppinTextBold,
 } from "../../components/StyledText";
 import { DefaultColor } from "../../constants/Colors";
-import ACTIVITY from "../../data/ACTIVITY";
 import ENUMERATION from "../../data/ENUMERATION";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
 import Enumeration, { EnumAnswer } from "../../models/Enumeration";
 import { EnumerationCard } from "../../components/Enumeration";
 import { ButtonComponent } from "../../components/Button/StyledButton";
-import Pdf from "react-native-pdf";
 import { useDispatch, useSelector } from "react-redux";
 import { addQuizScore } from "../../redux/actions/scoreAction";
 import { QuizScore } from "../../models/Score";
+import Video from 'react-native-video';
+import ModalViewLocalImage from "../../components/Modal/ModalViewLocalImage";
 
 type IType = {
   params: ExamParamList["ExamView"];
@@ -45,9 +44,11 @@ export default function EnumerationScreen() {
   const activity = route.params.activity;
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
+
   const [isModalVisible, setModalVisible] = useState(
     activity.story ? true : false
   );
+  const [visibleImage, setVisibleImage] = useState(false);
   const [answers, setAnswers] = useState<Array<EnumAnswer>>([]);
 
   const [enumerations, setEnumerations] = useState<Array<Enumeration> | null>(
@@ -59,7 +60,6 @@ export default function EnumerationScreen() {
   const [isSubmitModal, setIsSubmitModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const dispatch = useDispatch();
-
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -67,6 +67,7 @@ export default function EnumerationScreen() {
   const toggleSubmitModal = () => {
     setIsSubmitModal(!isSubmitModal);
   };
+  console.log(activity);
 
   const handleGetLesson = () => {
     setLoading(true);
@@ -76,6 +77,12 @@ export default function EnumerationScreen() {
       (data: Enumeration) => data.activity_pk === activity.pk
     );
     if (filterEnumeration.length > 0) {
+      for (var i = filterEnumeration.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = filterEnumeration[i];
+        filterEnumeration[i] = filterEnumeration[j];
+        filterEnumeration[j] = temp;
+      }
       setEnumerations(filterEnumeration);
     }
     setLoading(false);
@@ -122,10 +129,14 @@ export default function EnumerationScreen() {
         activity.pk,
         enumeration.pk,
         answer ? answer : "",
-        enumeration.answer.length > 0
-          ? enumeration.answer === answer
+        enumeration.answer.length > 0 && answer != null
+          ? enumeration.answer.toLowerCase() === answer.toLowerCase()
           : undefined
       );
+      console.log(enumeration.answer.toLowerCase());
+      console.log(answer!.toLowerCase());
+      console.log(enumeration.answer.toLowerCase() === answer!.toLowerCase());
+
       setAnswers(answers.concat([myAnswer]));
       toggleSubmitModal();
       return;
@@ -149,12 +160,17 @@ export default function EnumerationScreen() {
     };
   };
 
+
+  const boolShowActivity = () => {
+    return activity.video !== undefined || activity.image !== undefined;
+  }
+
   return (
     <ViewWithLoading loading={loading}>
       <View style={styles.container}>
         {enumerations && currentIndex !== enumerations.length ? (
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            {activity && activity.story && (
+            {activity && boolShowActivity() && (
               <View style={styles.storyContainer}>
                 <TouchableOpacity
                   onPress={() => {
@@ -168,6 +184,8 @@ export default function EnumerationScreen() {
                 </TouchableOpacity>
               </View>
             )}
+            <PoppinText style={{ fontFamily: "poppins-semibold", marginBottom: 10 }}>{activity.direction}</PoppinText>
+
             {enumerations &&
               currentIndex !== enumerations.length &&
               enumerations.length > 0 && (
@@ -211,14 +229,14 @@ export default function EnumerationScreen() {
               <PoppinTextBold
                 style={{
                   color: answer
-                    ? enumeration.answer === answer
+                    ? enumeration.answer.toLowerCase() === answer.toLowerCase()
                       ? DefaultColor.main
                       : DefaultColor.danger
                     : DefaultColor.danger,
                 }}
               >
-                {enumeration.answer.length > 0
-                  ? enumeration.answer === answer
+                {enumeration.answer.length > 0 && answer != null
+                  ? enumeration.answer.toLowerCase() === answer.toLowerCase()
                     ? "CORRECT ANSWER!"
                     : "WRONG ANSWER!"
                   : "This question will be check by your teacher"}
@@ -258,29 +276,37 @@ export default function EnumerationScreen() {
           backdropTransitionOutTiming={600}
         >
           <View style={styles.modalContainer}>
-            <Pdf
-              trustAllCerts={false}
-              source={
-                Platform.OS === "ios"
-                  ? activity.story
-                  : {
-                      uri: `bundle-assets://${activity.path}`,
-                    }
-              }
-              onLoadComplete={(numberOfPages, filePath) => {
-                console.log(`Number of pages: ${numberOfPages}`);
-              }}
-              onPageChanged={(page, numberOfPages) => {
-                console.log(`Current page: ${page}`);
-              }}
-              onError={(error) => {
-                console.log(error);
-              }}
-              onPressLink={(uri) => {
-                console.log(`Link pressed: ${uri}`);
-              }}
-              style={styles.pdf}
-            />
+            {
+              activity.video &&
+              <Video
+                style={styles.video}
+                source={activity.video}
+                controls
+                resizeMode="contain"
+                onError={(e) => {
+                  console.log(e);
+                }}
+              />
+            }
+
+            {
+              activity.image &&
+              <View style={styles.imageContainer}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setVisibleImage(true);
+                    setModalVisible(false);
+                  }}
+                >
+                  <Image
+                    source={activity.image}
+                    height={"100%"}
+                    width={"100%"}
+                    resizeMode={"contain"}
+                  />
+                </TouchableOpacity>
+              </View>
+            }
 
             <Pressable onPress={toggleModal} style={styles.closeContainer}>
               <PoppinText
@@ -347,6 +373,20 @@ export default function EnumerationScreen() {
           </View>
         </Modal>
       )}
+      {
+        activity.image &&
+
+        <ModalViewLocalImage
+          title="Image"
+          uri={activity.image}
+          visible={visibleImage}
+          onClose={() => {
+            setVisibleImage(false);
+            setModalVisible(true);
+          }}
+        />
+      }
+
     </ViewWithLoading>
   );
 }
@@ -379,6 +419,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DefaultColor.white,
     overflow: "hidden",
+    padding: 10
   },
   closeContainer: {
     flex: 0,
@@ -402,9 +443,21 @@ const styles = StyleSheet.create({
     borderColor: DefaultColor.white,
     borderRadius: 20,
   },
-  pdf: {
+  video: {
     flex: 1,
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    borderWidth: 1,
+    borderColor: DefaultColor.main,
+    borderRadius: 5
+  },
+  imageContainer: {
+    flex: 1,
+    overflow: "hidden",
+    padding: 5,
+    marginVertical: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: DefaultColor.main,
+    borderRadius: 5
   },
 });

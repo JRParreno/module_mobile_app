@@ -55,6 +55,14 @@ export default function GameScreen() {
     const getQuestions = GAME_QUESTIONS().filter(
       (data) => data.category_pk === amun.pk
     );
+    if (getQuestions.length > 0) {
+      for (var i = getQuestions.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = getQuestions[i];
+        getQuestions[i] = getQuestions[j];
+        getQuestions[j] = temp;
+      }
+    }
     // @ts-ignore
     setQuestions(getQuestions);
   };

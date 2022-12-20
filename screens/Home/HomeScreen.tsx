@@ -1,15 +1,56 @@
 import * as React from "react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import ViewWithLoading from "../../components/ViewWithLoading";
 import { PoppinTextBold } from "../../components/StyledText";
 import { CategoryCard } from "../../components/Category";
 import { DefaultColor } from "../../constants/Colors";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused, useNavigation } from "@react-navigation/native";
+import { Audio } from "expo-av";
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState<boolean>(false);
   const navigation = useNavigation();
+
+
+  const [sound, setSound] = React.useState<Audio.Sound | null>(null);
+
+  async function playSound() {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync(require('../../assets/mp3/music.mp3')
+    );
+    setSound(sound);
+
+    console.log('Playing Sound');
+    await sound.playAsync();
+    sound.setIsLoopingAsync(true);
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+        console.log('Unloading Sound');
+        sound.unloadAsync();
+      }
+      : undefined;
+  }, [sound]);
+  const focus = useIsFocused();
+
+  useEffect(() => {
+    if (focus) {
+      playSound();
+    } else {
+      if (sound != null) {
+        sound.stopAsync();
+      }
+    }
+
+    return () => {
+      focus
+    }
+  }, [focus])
+
+
   return (
     <ViewWithLoading loading={loading}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

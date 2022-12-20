@@ -9,7 +9,7 @@ import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { ListItem } from "react-native-elements";
 import ViewWithLoading from "../../components/ViewWithLoading";
-import LEKSYON from "../../data/LEKSYON";
+import LECTURE from "../../data/LECTURE";
 import Lecture from "../../models/Lecture";
 import { LeksyonParamList } from "../../types";
 import Lottie from "lottie-react-native";
@@ -26,7 +26,7 @@ export default function LecturesScreen() {
   const quarter = route.params.quarter;
   const navigation = useNavigation();
   const handleGetLectures = () => {
-    const lecturesData = LEKSYON().filter(
+    const lecturesData = LECTURE().filter(
       (data: Lecture) => data.quarter_pk === quarter.pk
     );
     setLectures(lecturesData);
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DefaultColor.white,
     borderRadius: 10,
+    marginBottom: 10
   },
   listTextStyle: {
     fontFamily: "poppins-regular",

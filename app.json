@@ -2,15 +2,15 @@
   "expo": {
     "name": "MTL",
     "slug": "module_mobile_app",
-    "version": "1.0.11",
+    "version": "1.0.21",
     "orientation": "portrait",
     "icon": "./assets/images/playstore-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/playstore-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#38B6FF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -40,10 +40,6 @@
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "@config-plugins/react-native-blob-util",
-      "@config-plugins/react-native-pdf"
-    ],
     "extra": {
       "eas": {
         "projectId": "c7207d35-12ca-4fc0-b21a-4e8610951bfb"
